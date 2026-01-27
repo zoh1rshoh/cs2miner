@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CS2 Mining</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background: #121212; color: white; text-align: center; font-family: sans-serif; overflow: hidden; }
+        .coin-container { margin-top: 50px; }
+        #coin { width: 200px; transition: transform 0.1s; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        #coin:active { transform: scale(0.9); }
+        .stats { font-size: 24px; margin-top: 20px; color: #ffd700; }
+        #save-btn { margin-top: 30px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <h1>CS2 MINING</h1>
+    <div class="stats">Coins: <span id="balance">0</span></div>
+    
+    <div class="coin-container">
+        <!-- CS2 Tangasi o'rniga rasm manzili -->
+        <img id="coin" src="https://raw.githubusercontent.com/TelegramGameSkins/CS2/main/coin.png" alt="CS2 Coin">
+    </div>
+
+    <button id="save-btn">SAVE & EXIT</button>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Oynani to'liq ochish
+
+        let balance = 0;
+        const balanceDisplay = document.getElementById('balance');
+        const coin = document.getElementById('coin');
+        const saveBtn = document.getElementById('save-btn');
+
+        // Tanga bosilganda
+        coin.addEventListener('click', () => {
+            balance += 0.1;
+            balanceDisplay.innerText = balance.toFixed(1);
+            // Vibratsiya (agar telefon qo'llasa)
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        });
+
+        // Saqlash va chiqish
+        saveBtn.addEventListener('click', () => {
+            tg.sendData(balance.toFixed(1)); // Ma'lumotni botga yuborish
+            tg.close();
+        });
+    </script>
+</body>
+</html>
