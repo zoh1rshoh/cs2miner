@@ -35,9 +35,23 @@
             height: 100vh;
         }
 
-        /* --- Header Section --- */
+        /* --- PAGES (Bo'limlar) --- */
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .page.active {
+            display: flex;
+        }
+
+        /* --- MINE PAGE STYLES --- */
         .header {
-            padding-top: 20px;
+            padding-top: 30px;
             text-align: center;
             flex-shrink: 0;
         }
@@ -51,119 +65,164 @@
             margin-bottom: 5px;
         }
 
+        /* F harfi olib tashlandi, faqat raqam qoldi */
         .session-balance {
-            font-size: 48px;
+            font-size: 52px;
             font-weight: 700;
             color: var(--text-color);
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 20px rgba(88, 166, 255, 0.4);
         }
 
-        /* --- Main Mining Area --- */
         .mining-area {
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            padding: 20px 0;
+            width: 100%;
         }
 
         .coin-container {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 300px;
+            height: 300px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Moviy aylananing porlashi */
+        /* Siz tashlagan ko'k aylananing effekti */
         .glow-ring {
             position: absolute;
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 4px solid var(--accent-color);
-            box-shadow: 0 0 30px var(--accent-color), inset 0 0 20px rgba(88, 166, 255, 0.3);
+            border: 2px solid rgba(88, 166, 255, 0.3);
+            box-shadow: 0 0 40px rgba(88, 166, 255, 0.2), inset 0 0 20px rgba(88, 166, 255, 0.1);
             pointer-events: none;
         }
 
-        /* Tanga tugmasi */
         .coin-btn {
-            width: 90%;
-            height: 90%;
+            width: 85%;
+            height: 85%;
             border-radius: 50%;
             cursor: pointer;
-            transition: transform 0.1s ease;
+            transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
-            /* Tanga rasmi */
-            background-image: url('https://i.imgur.com/8Ql4y7X.png'); /* Bu yerga o'z rasmingiz manzilini qo'ying */
+            /* DIQQAT: Rasmni GitHubga 'coin.png' nomi bilan yuklang */
+            background-image: url('coin.png'); 
             background-size: cover;
             background-position: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            background-repeat: no-repeat;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .coin-btn:active {
-            transform: scale(0.96);
+            transform: scale(0.95);
         }
 
-        /* Uchib chiquvchi raqamlar animatsiyasi */
         .floater {
             position: absolute;
-            color: var(--text-color);
+            color: white;
             font-weight: bold;
             font-size: 28px;
             pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
+            animation: floatUp 0.8s ease-out forwards;
             z-index: 20;
-            text-shadow: 0 0 5px var(--accent-color);
+            text-shadow: 0 0 5px #58a6ff;
         }
 
         @keyframes floatUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-120px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
         }
 
-        /* --- Energy Section --- */
         .energy-section {
-            padding: 0 30px 20px 30px;
+            width: 85%;
+            margin-bottom: 20px;
             flex-shrink: 0;
         }
 
         .energy-info {
             display: flex;
             justify-content: space-between;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 14px;
             color: var(--secondary-text);
             margin-bottom: 8px;
+            font-weight: bold;
         }
 
         .energy-bar-bg {
             width: 100%;
-            height: 14px;
+            height: 12px;
             background-color: var(--energy-bar-bg);
-            border-radius: 7px;
+            border-radius: 6px;
             overflow: hidden;
         }
 
         .energy-fill {
             height: 100%;
-            width: 100%; /* Boshlanishida to'la */
+            width: 100%;
             background: var(--energy-fill);
-            border-radius: 7px;
+            border-radius: 6px;
             transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(255, 136, 0, 0.5);
+            box-shadow: 0 0 10px rgba(255, 136, 0, 0.4);
         }
 
-        /* --- Bottom Navigation --- */
+        /* --- CASES PAGE STYLES --- */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .case-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .case-card img {
+            width: 80%;
+            height: auto;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+        }
+
+        .case-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .case-price {
+            color: #eebb00;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* --- OTHER PAGES --- */
+        .placeholder-text {
+            margin-top: 50px;
+            color: var(--secondary-text);
+            font-size: 18px;
+        }
+
+        /* --- NAV --- */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
             background-color: var(--nav-bg);
-            padding: 10px 0;
+            padding: 12px 0;
             border-top: 1px solid #30363d;
             flex-shrink: 0;
+            padding-bottom: 25px; /* iPhone uchun joy */
         }
 
         .nav-item {
@@ -171,61 +230,89 @@
             flex-direction: column;
             align-items: center;
             color: var(--secondary-text);
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
-            transition: color 0.2s;
             width: 25%;
+            transition: 0.2s;
         }
 
         .nav-item i {
-            font-size: 22px;
-            margin-bottom: 4px;
+            font-size: 20px;
+            margin-bottom: 5px;
         }
 
-        .nav-item.active {
+        .nav-item.active-nav {
             color: var(--accent-color);
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="session-title">Session Earnings</div>
-        <div class="session-balance" id="score">150.50</div>
+    <div id="mine" class="page active">
+        <div class="header">
+            <div class="session-title">Balance</div>
+            <div class="session-balance" id="score">0.00</div>
+        </div>
+
+        <div class="mining-area">
+            <div class="coin-container">
+                <div class="glow-ring"></div>
+                <div class="coin-btn" id="coinBtn"></div>
+            </div>
+        </div>
+
+        <div class="energy-section">
+            <div class="energy-info">
+                <div><i class="fas fa-bolt" style="color: #ffaa00;"></i> Energy</div>
+                <div id="energy-txt">1000/1000</div>
+            </div>
+            <div class="energy-bar-bg">
+                <div class="energy-fill" id="energy-bar"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="mining-area">
-        <div class="coin-container">
-            <div class="glow-ring"></div>
-            <div class="coin-btn" id="coinBtn"></div>
+    <div id="cases" class="page">
+        <h2 style="margin-top: 20px;">📦 CS2 Cases</h2>
+        <div class="cases-grid">
+            <div class="case-card">
+                <img src="https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f" alt="Case">
+                <div class="case-title">Revolution Case</div>
+                <div class="case-price">1500 Coins</div>
+            </div>
+            <div class="case-card">
+                <img src="https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f" alt="Case">
+                <div class="case-title">Dreams & Nightmares</div>
+                <div class="case-price">2000 Coins</div>
+            </div>
         </div>
     </div>
 
-    <div class="energy-section">
-        <div class="energy-info">
-            <div><i class="fas fa-bolt" style="color: #ffaa00;"></i> Energy</div>
-            <div id="energy-txt">1000/1000</div>
-        </div>
-        <div class="energy-bar-bg">
-            <div class="energy-fill" id="energy-bar"></div>
-        </div>
+    <div id="invite" class="page">
+        <h2 style="margin-top: 20px;">👥 Invite Friends</h2>
+        <div class="placeholder-text">Invite system coming soon...</div>
+    </div>
+
+    <div id="profile" class="page">
+        <h2 style="margin-top: 20px;">👤 My Profile</h2>
+        <div class="placeholder-text">User stats will appear here.</div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="setActiveNav(this, 'mine')">
+        <div class="nav-item active-nav" onclick="showPage('mine', this)">
             <i class="fas fa-gavel"></i>
             <span>Mine</span>
         </div>
-        <div class="nav-item" onclick="setActiveNav(this, 'skins')">
-            <i class="fas fa-tshirt"></i>
-            <span>Skins</span>
+        <div class="nav-item" onclick="showPage('cases', this)">
+            <i class="fas fa-box-open"></i>
+            <span>Cases</span>
         </div>
-        <div class="nav-item" onclick="setActiveNav(this, 'invite')">
+        <div class="nav-item" onclick="showPage('invite', this)">
             <i class="fas fa-user-friends"></i>
-            <span>Invite Friends</span>
+            <span>Invite</span>
         </div>
-        <div class="nav-item" onclick="setActiveNav(this, 'profile')">
+        <div class="nav-item" onclick="showPage('profile', this)">
             <i class="fas fa-user"></i>
             <span>Profile</span>
         </div>
@@ -235,109 +322,75 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // O'yin o'zgaruvchilari
-        let score = 150.50;
+        let score = 0.00;
         let energy = 1000;
         const maxEnergy = 1000;
-        const clickValue = 0.50; // Har bir bosishda qancha qo'shilishi
-        const energyCost = 5; // Har bir bosishda qancha energiya ketishi
 
-        // Elementlarni olish
         const scoreEl = document.getElementById('score');
         const coinBtn = document.getElementById('coinBtn');
         const energyBar = document.getElementById('energy-bar');
         const energyTxt = document.getElementById('energy-txt');
 
-        // Tanga bosish hodisasi
+        // Navigatsiya logikasi
+        function showPage(pageId, navEl) {
+            // Hamma sahifalarni yashirish
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Nav tugmalarni o'chirish
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            
+            // Tanlanganini yoqish
+            document.getElementById(pageId).classList.add('active');
+            navEl.classList.add('active-nav');
+        }
+
+        // Tanga bosish
         coinBtn.addEventListener('touchstart', handleTap, { passive: false });
         coinBtn.addEventListener('click', handleTap);
 
         function handleTap(e) {
-            // Agar touch hodisasi bo'lsa, default harakatni to'xtatish (zoom va scrollni oldini olish uchun)
-            if (e.type === 'touchstart') {
-                 e.preventDefault();
-            }
-            
-            if (energy < energyCost) {
-                tg.showAlert("⚡ Not enough energy! Please wait.");
-                return;
-            }
+            if (e.type === 'touchstart') e.preventDefault();
 
-            // Hisobni va energiyani yangilash
-            score += clickValue;
-            energy -= energyCost;
-            updateUI();
-
-            // Vibratsiya (Haptic Feedback)
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
+            if (energy > 0) {
+                score += 0.50;
+                energy -= 5;
+                updateUI();
+                
+                // Animatsiya
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+                
+                // Raqam uchishi
+                let x = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                let y = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                createFloater(x, y);
             }
-
-            // Animatsiya uchun bosilgan joy koordinatalarini olish
-            let x, y;
-            if (e.type === 'touchstart') {
-                const touch = e.touches[0] || e.changedTouches[0];
-                x = touch.clientX;
-                y = touch.clientY;
-            } else {
-                x = e.clientX;
-                y = e.clientY;
-            }
-            createFloater(x, y);
-            
-            // Ma'lumotni botga yuborish (ixtiyoriy: har 10 marta bosganda yoki ma'lum vaqtda yuborish yaxshiroq)
-            // sendDataToBot(); 
         }
 
-        // Uchib chiquvchi raqam funksiyasi
         function createFloater(x, y) {
             const el = document.createElement('div');
             el.className = 'floater';
-            el.innerText = '+' + clickValue.toFixed(2);
+            el.innerText = '+0.50';
             el.style.left = `${x}px`;
             el.style.top = `${y}px`;
             document.body.appendChild(el);
-
-            setTimeout(() => el.remove(), 1000);
+            setTimeout(() => el.remove(), 800);
         }
 
-        // UI ni yangilash funksiyasi
         function updateUI() {
             scoreEl.innerText = score.toFixed(2);
             energyTxt.innerText = `${energy}/${maxEnergy}`;
-            const energyPercent = (energy / maxEnergy) * 100;
-            energyBar.style.width = `${energyPercent}%`;
+            energyBar.style.width = (energy / maxEnergy * 100) + "%";
         }
 
-        // Energiyani qayta tiklash (har soniyada)
+        // Energiya to'ldirish
         setInterval(() => {
             if (energy < maxEnergy) {
-                energy += 2; // Har soniyada 2 energiya qo'shiladi
-                if (energy > maxEnergy) energy = maxEnergy;
+                energy += 2;
                 updateUI();
             }
         }, 1000);
-        
-        // Ma'lumotni botga yuborish funksiyasi (Bot yopilayotganda chaqirilishi mumkin)
-        function sendDataToBot() {
-            tg.sendData(score.toFixed(2));
-        }
-        
-        // Bot yopilganda ma'lumotni saqlash
-        tg.onEvent('mainButtonClicked', sendDataToBot);
-        tg.onEvent('popupClosed', sendDataToBot);
 
-        // Navigatsiya menyusini boshqarish
-        function setActiveNav(element, section) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
-            // Bu yerda boshqa bo'limlarga o'tish logikasini yozishingiz mumkin
-            // Masalan: if(section === 'skins') { ... }
-            console.log("Navigated to:", section);
-        }
-
-        // Boshlang'ich UI holatini o'rnatish
-        updateUI();
+        // Saqlash (demo)
+        tg.onEvent('mainButtonClicked', () => tg.sendData(score.toFixed(2)));
 
     </script>
 </body>
