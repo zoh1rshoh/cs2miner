@@ -43,7 +43,7 @@
 
         .mining-area { flex-grow: 1; display: flex; justify-content: center; align-items: center; width: 100%; }
 
-        /* Tanga (Mukammal Dumaloq) */
+        /* Tanga */
         .coin-container {
             width: 280px; height: 280px; position: relative;
             display: flex; justify-content: center; align-items: center;
@@ -78,7 +78,7 @@
         .case-title { font-weight: 700; margin-bottom: 5px; }
         .case-price { color: #eebb00; font-weight: bold; font-size: 14px; }
 
-        /* --- PROFILE (YANGILANGAN) --- */
+        /* --- PROFILE --- */
         .profile-header {
             width: 100%; background: linear-gradient(180deg, #1f293a 0%, #0d1117 100%);
             padding: 30px 20px; display: flex; align-items: center; gap: 15px;
@@ -91,7 +91,7 @@
         .p-info h2 { margin: 0; font-size: 20px; color: white; }
         .p-info p { margin: 0; font-size: 14px; color: #8b949e; }
 
-        /* Best Drop Card */
+        /* Best Drop */
         .best-drop-container { width: 90%; margin-top: 20px; }
         .best-drop-card {
             background: radial-gradient(circle at center, #2d1b1b 0%, #161b22 100%);
@@ -108,7 +108,7 @@
 
         .inventory-title { width: 90%; margin-top: 25px; margin-bottom: 10px; font-size: 18px; font-weight: bold; border-bottom: 1px solid #30363d; padding-bottom: 5px; }
 
-        /* --- CASE OPENER (ICHKI SAHIFA) --- */
+        /* --- CASE VIEWER (LIST) --- */
         #case-opener {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0d1117; z-index: 200; display: none; flex-direction: column; overflow-y: auto;
@@ -117,13 +117,13 @@
             position: relative; width: 100%; height: 220px; 
             background: radial-gradient(circle at center, #2a3441 0%, #0d1117 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-bottom: 2px solid #30363d;
+            border-bottom: 2px solid #30363d; flex-shrink: 0;
         }
         .opener-header img { height: 130px; filter: drop-shadow(0 0 20px rgba(0,0,0,0.5)); }
         .back-btn {
             position: absolute; top: 20px; left: 20px;
             background: rgba(255,255,255,0.1); border: none; color: white;
-            padding: 8px 15px; border-radius: 8px; cursor: pointer; font-family: 'Rajdhani'; font-weight: bold;
+            padding: 8px 15px; border-radius: 8px; cursor: pointer; font-family: 'Rajdhani'; font-weight: bold; z-index: 10;
         }
         .skins-list {
             padding: 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; box-sizing: border-box;
@@ -132,7 +132,13 @@
         .skin-item {
             background: #161b22; border-radius: 8px; padding: 10px; text-align: center;
             border-bottom: 3px solid transparent; display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; position: relative;
         }
+        /* Inspect belgisi */
+        .inspect-icon {
+            position: absolute; top: 5px; right: 5px; color: #8b949e; font-size: 12px; opacity: 0.5;
+        }
+        .skin-item:active { transform: scale(0.98); background: #1f293a; }
         .skin-item img { width: 90%; height: auto; margin-bottom: 5px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.05)); }
         .skin-name { font-size: 12px; color: #8b949e; line-height: 1.2; font-weight: 600; }
         
@@ -144,12 +150,53 @@
 
         .open-controls {
             position: fixed; bottom: 0; width: 100%; background: #161b22;
-            padding: 20px; border-top: 1px solid #30363d; display: flex; justify-content: center; box-sizing: border-box;
+            padding: 20px; border-top: 1px solid #30363d; display: flex; justify-content: center; box-sizing: border-box; z-index: 250;
         }
         .open-btn {
             background: #238636; color: white; border: none; padding: 15px 40px;
             border-radius: 12px; font-size: 20px; font-weight: bold; font-family: 'Rajdhani';
             width: 100%; max-width: 300px; cursor: pointer; box-shadow: 0 5px 15px rgba(35, 134, 54, 0.4);
+        }
+
+        /* --- 360 INSPECT MODAL (YANGI) --- */
+        #inspect-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #2a3441 0%, #0d1117 90%);
+            z-index: 400; display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .inspect-container {
+            width: 100%; height: 60%; display: flex; align-items: center; justify-content: center;
+            perspective: 1000px; /* 3D effect */
+        }
+        .inspect-img {
+            width: 80%; max-width: 400px; height: auto;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+            transition: transform 0.1s linear; /* Smooth manual rotation */
+            transform-style: preserve-3d;
+        }
+        .auto-rotate {
+            animation: spin360 6s infinite linear;
+        }
+        @keyframes spin360 {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+        .inspect-info {
+            text-align: center; margin-bottom: 20px;
+        }
+        .inspect-name { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+        .inspect-controls {
+            display: flex; gap: 15px; margin-top: 20px;
+        }
+        .inspect-btn {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;
+            padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: 'Rajdhani';
+        }
+        .inspect-slider-container {
+            width: 80%; margin-top: 20px; display: flex; align-items: center; justify-content: center;
+        }
+        input[type=range] {
+            width: 100%; accent-color: #58a6ff;
         }
 
         /* Yutuq Modali */
@@ -180,6 +227,7 @@
 </head>
 <body>
 
+    <!-- 1. MINE PAGE -->
     <div id="mine" class="page active">
         <div class="header">
             <div style="color: #8b949e; text-transform: uppercase;">Balance</div>
@@ -203,6 +251,7 @@
         </div>
     </div>
 
+    <!-- 2. CASES MENU -->
     <div id="cases" class="page">
         <h2 style="margin-top: 20px;">📦 CS2 Cases</h2>
         <div class="cases-grid">
@@ -219,11 +268,13 @@
         </div>
     </div>
 
+    <!-- 3. INVITE -->
     <div id="invite" class="page">
         <h2 style="margin-top: 20px;">👥 Invite Friends</h2>
         <p style="color:#8b949e; text-align:center;">Invite system works via Bot.</p>
     </div>
 
+    <!-- 4. PROFILE PAGE -->
     <div id="profile" class="page" style="padding: 0;">
         <div class="profile-header">
             <img id="p-avatar" class="p-avatar" src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png">
@@ -242,9 +293,11 @@
 
         <div class="inventory-title">📦 Inventory</div>
         <div id="inventory-list" class="skins-list">
-            </div>
+            <!-- Items here -->
+        </div>
     </div>
 
+    <!-- --- CASE VIEWER --- -->
     <div id="case-opener">
         <div class="opener-header">
             <button class="back-btn" onclick="closeCaseViewer()"><i class="fas fa-arrow-left"></i> Back</button>
@@ -253,11 +306,12 @@
         </div>
         
         <div style="text-align: center; margin-top: 10px; color: #8b949e; font-size: 12px; text-transform: uppercase;">
-            Contains one of the following:
+            Tap item to Inspect 360°
         </div>
         
         <div class="skins-list" id="case-contents">
-            </div>
+            <!-- Items -->
+        </div>
 
         <div class="open-controls">
             <button class="open-btn" onclick="spinCase()">
@@ -266,6 +320,32 @@
         </div>
     </div>
 
+    <!-- --- 360 INSPECT MODAL --- -->
+    <div id="inspect-modal">
+        <div style="position:absolute; top:20px; left:20px; z-index:500;">
+            <button class="back-btn" onclick="closeInspect()"><i class="fas fa-times"></i> Close</button>
+        </div>
+
+        <div class="inspect-info">
+            <div id="inspect-name" class="inspect-name">P250 | Sand Dune</div>
+            <div style="color:#8b949e; font-size:14px;">Basic Grade Pistol</div>
+        </div>
+
+        <div class="inspect-container">
+            <img id="inspect-img-el" class="inspect-img" src="p250.png">
+        </div>
+
+        <div class="inspect-slider-container">
+            <span style="color:#8b949e; font-size:12px; margin-right:10px;">Rotate</span>
+            <input type="range" min="0" max="360" value="0" id="rotate-slider" oninput="manualRotate(this.value)">
+        </div>
+
+        <div class="inspect-controls">
+            <button class="inspect-btn" onclick="toggleAutoRotate()">🔄 Auto Spin</button>
+        </div>
+    </div>
+
+    <!-- --- REWARD MODAL --- -->
     <div id="reward-modal" onclick="closeReward()">
         <div class="reward-card" id="reward-card">
             <h3 style="color: #8b949e; font-size: 12px; letter-spacing: 1px;">YOU UNBOXED:</h3>
@@ -275,6 +355,7 @@
         </div>
     </div>
 
+    <!-- NAVIGATION -->
     <div class="bottom-nav">
         <div class="nav-item active-nav" onclick="showPage('mine', this)"><i class="fas fa-gavel"></i> Mine</div>
         <div class="nav-item" onclick="showPage('cases', this)"><i class="fas fa-box-open"></i> Cases</div>
@@ -286,54 +367,51 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // --- REAL CS2 SKINS DATA (Images included) ---
-        // Bu ro'yxatda haqiqiy Steam rasmlari bor
+        // --- SKINS DATA ---
+        // P250 Sand Dune uchun 'p250.png' ishlatiladi.
         const CS2_SKINS = [
             // BLUES (Common)
-            { id: 1, name: "P250 | Sand Dune", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
+            { id: 1, name: "P250 | Sand Dune", rarity: "blue", img: "p250.png" },
             { id: 2, name: "MP9 | Storm", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
             { id: 3, name: "MAG-7 | Silver", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
-            // PURPLES (Uncommon)
-            { id: 4, name: "Glock-18 | Vogue", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" }, // Placeholder fix
+            // PURPLES
+            { id: 4, name: "Glock-18 | Vogue", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
             { id: 5, name: "M4A4 | Evil Daimyo", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }, 
-            // PINKS (Rare)
+            // PINKS
             { id: 6, name: "AWP | Atheris", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }, 
             { id: 7, name: "AK-47 | Redline", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
-            // REDS (Legendary)
+            // REDS
             { id: 8, name: "AK-47 | Asiimov", rarity: "red", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
             { id: 9, name: "USP-S | Kill Confirmed", rarity: "red", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
-            // GOLD (Special)
+            // GOLD
             { id: 10, name: "★ Karambit | Fade", rarity: "gold", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }
         ];
 
-        // --- GAME LOGIC ---
+        // --- GAME VARIABLES ---
         let score = parseFloat(localStorage.getItem('cs2_score')) || 0;
         let energy = parseFloat(localStorage.getItem('cs2_energy')) || 100;
         let inventory = JSON.parse(localStorage.getItem('cs2_inventory')) || [];
         const MAX_ENERGY = 100;
         const REFILL_RATE = MAX_ENERGY / (3 * 3600); 
 
-        // Initial UI
+        // UI Elements
         const scoreEl = document.getElementById('score');
         const energyBar = document.getElementById('energy-bar');
         const energyTxt = document.getElementById('energy-txt');
         const coinBtn = document.getElementById('coinBtn');
 
-        // Set User Profile from Telegram
+        // User Setup
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
-            document.getElementById('p-name').innerText = user.first_name + (user.last_name ? " " + user.last_name : "");
+            document.getElementById('p-name').innerText = user.first_name;
             document.getElementById('p-id').innerText = "ID: " + user.id;
-            if (user.photo_url) {
-                document.getElementById('p-avatar').src = user.photo_url;
-            }
+            if (user.photo_url) document.getElementById('p-avatar').src = user.photo_url;
         }
 
         updateUI();
         updateInventoryUI();
         updateBestDrop();
 
-        // --- NAVIGATION ---
         function showPage(pageId, navEl) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
@@ -353,7 +431,6 @@
                 updateUI();
                 saveData();
                 if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-                
                 let x = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
                 let y = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
                 createFloater(x, y);
@@ -372,21 +449,23 @@
             setTimeout(() => el.remove(), 800);
         }
 
-        // --- CASE SYSTEM ---
+        // --- CASE VIEWER & INSPECT ---
         const caseOpener = document.getElementById('case-opener');
         const caseContentsDiv = document.getElementById('case-contents');
-        let currentCaseName = "";
+        const inspectModal = document.getElementById('inspect-modal');
+        const inspectImgEl = document.getElementById('inspect-img-el');
+        const inspectNameEl = document.getElementById('inspect-name');
+        const rotateSlider = document.getElementById('rotate-slider');
 
         function openCaseViewer(type) {
             caseOpener.style.display = 'flex';
             caseContentsDiv.innerHTML = "";
-            currentCaseName = "Basic Case"; // Hozircha faqat Basic bor
-
-            // Generic Skinlar o'rniga haqiqiy rasmlar va nomlar
             CS2_SKINS.forEach(skin => {
                 const item = document.createElement('div');
                 item.className = `skin-item ${skin.rarity}`;
+                item.onclick = () => openInspect(skin);
                 item.innerHTML = `
+                    <div class="inspect-icon"><i class="fas fa-search"></i></div>
                     <img src="${skin.img}" alt="Skin">
                     <div class="skin-name" style="color:${getRarityColor(skin.rarity)}">${skin.name}</div>
                 `;
@@ -396,6 +475,37 @@
 
         function closeCaseViewer() { caseOpener.style.display = 'none'; }
 
+        // --- INSPECT LOGIC ---
+        function openInspect(skin) {
+            inspectModal.style.display = 'flex';
+            inspectImgEl.src = skin.img;
+            inspectNameEl.innerText = skin.name;
+            inspectNameEl.style.color = getRarityColor(skin.rarity);
+            
+            // Reset
+            inspectImgEl.style.transform = 'rotateY(0deg)';
+            rotateSlider.value = 0;
+            inspectImgEl.classList.remove('auto-rotate');
+        }
+
+        function closeInspect() {
+            inspectModal.style.display = 'none';
+        }
+
+        function manualRotate(val) {
+            inspectImgEl.classList.remove('auto-rotate');
+            inspectImgEl.style.transform = `rotateY(${val}deg)`;
+        }
+
+        function toggleAutoRotate() {
+            if (inspectImgEl.classList.contains('auto-rotate')) {
+                inspectImgEl.classList.remove('auto-rotate');
+            } else {
+                inspectImgEl.classList.add('auto-rotate');
+            }
+        }
+
+        // --- CASE SPIN ---
         function getRarityColor(rarity) {
             if(rarity === 'blue') return '#4b69ff';
             if(rarity === 'purple') return '#8847ff';
@@ -410,11 +520,9 @@
                 tg.showAlert("Not enough coins! Need 200.");
                 return;
             }
-
             score -= 200;
             updateUI();
 
-            // Rarity Logic
             let rand = Math.random() * 100;
             let rarity = 'blue';
             if (rand > 99) rarity = 'gold'; 
@@ -423,11 +531,8 @@
             else if (rand > 65) rarity = 'purple'; 
             
             const possibleSkins = CS2_SKINS.filter(s => s.rarity === rarity);
-            // Tasodifiy skin tanlash
             const baseSkin = possibleSkins[Math.floor(Math.random() * possibleSkins.length)];
-            
-            // Yutuqqa "Qaysi Casedan" degan ma'lumotni qo'shamiz
-            const wonSkin = { ...baseSkin, sourceCase: currentCaseName, obtainedAt: Date.now() };
+            const wonSkin = { ...baseSkin, obtainedAt: Date.now() };
 
             inventory.push(wonSkin);
             localStorage.setItem('cs2_inventory', JSON.stringify(inventory));
@@ -446,25 +551,23 @@
 
             card.style.borderColor = getRarityColor(skin.rarity);
             card.style.boxShadow = `0 0 50px ${getRarityColor(skin.rarity)}`;
-            
             img.src = skin.img;
             name.innerText = skin.name;
             name.style.color = getRarityColor(skin.rarity);
-
             modal.style.display = 'flex';
             if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
         }
 
         function closeReward() { document.getElementById('reward-modal').style.display = 'none'; }
 
-        // --- PROFILE LOGIC ---
+        // --- INVENTORY ---
         function updateInventoryUI() {
             const list = document.getElementById('inventory-list');
             list.innerHTML = "";
-            // Eng yangilarini tepaga chiqarish
             [...inventory].reverse().forEach(skin => {
                 const item = document.createElement('div');
                 item.className = `skin-item ${skin.rarity}`;
+                item.onclick = () => openInspect(skin);
                 item.innerHTML = `
                     <img src="${skin.img}">
                     <div class="skin-name" style="color:${getRarityColor(skin.rarity)}">${skin.name}</div>
@@ -476,30 +579,21 @@
         function updateBestDrop() {
             const bestEl = document.getElementById('best-drop-el');
             if (inventory.length === 0) return;
-
-            // Rarity darajalari
             const levels = { 'blue': 1, 'purple': 2, 'pink': 3, 'red': 4, 'gold': 5 };
-            
-            // Eng kattasini topish
             let bestSkin = inventory[0];
             inventory.forEach(skin => {
-                if (levels[skin.rarity] > levels[bestSkin.rarity]) {
-                    bestSkin = skin;
-                }
+                if (levels[skin.rarity] > levels[bestSkin.rarity]) bestSkin = skin;
             });
-
-            // HTMLni yangilash
             const color = getRarityColor(bestSkin.rarity);
             bestEl.style.borderColor = color;
             bestEl.innerHTML = `
                 <div class="best-drop-label" style="color:${color}">Best Drop</div>
                 <img class="best-drop-img" src="${bestSkin.img}">
                 <div class="best-drop-name" style="color:${color}">${bestSkin.name}</div>
-                <div class="best-drop-case">Found in: ${bestSkin.sourceCase || 'Basic Case'}</div>
+                <div class="best-drop-case">Found in: Basic Case</div>
             `;
         }
 
-        // --- SYSTEM ---
         function updateUI() {
             scoreEl.innerText = Math.floor(score).toLocaleString();
             energyTxt.innerText = `${Math.floor(energy)}/${MAX_ENERGY}`;
