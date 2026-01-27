@@ -156,31 +156,39 @@
             width: 100%; max-width: 300px; cursor: pointer; box-shadow: 0 5px 15px rgba(35, 134, 54, 0.4);
         }
 
-        /* --- 3D INSPECT MODAL (YANGI) --- */
+        /* --- 3D INSPECT MODAL (True 3D Effect) --- */
         #inspect-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            /* Orqa fon qoraytirildi, oq narsa yo'q */
             background: radial-gradient(circle, #1a202c 0%, #000000 100%);
             z-index: 400; display: none; flex-direction: column; align-items: center; justify-content: center;
-            touch-action: none; /* Telefonda scroll bo'lib ketmasligi uchun */
+            touch-action: none;
+            perspective: 1000px;
         }
         
-        .inspect-container {
-            width: 100%; height: 60%; 
-            display: flex; align-items: center; justify-content: center;
-            perspective: 1200px; /* 3D chuqurlik */
+        .inspect-scene {
+            width: 300px; height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
             cursor: grab;
         }
-        
-        .inspect-container:active { cursor: grabbing; }
+        .inspect-scene:active { cursor: grabbing; }
 
-        .inspect-img {
-            width: 90%; max-width: 500px; height: auto;
-            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.6)); /* Soya */
-            transition: transform 0.1s ease-out; /* Silliq harakat */
+        /* The 3D Object Group */
+        .gun-3d-group {
+            position: relative;
+            width: 100%; height: 100%;
             transform-style: preserve-3d;
-            /* Agar rasmda oq fon bo'lsa, uni yo'q qilishga harakat qilamiz (shaffof PNG bo'lsa zo'r ishlaydi) */
-            background: transparent; 
+            transition: transform 0.1s linear;
+        }
+
+        /* Layers for fake thickness */
+        .gun-layer {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            pointer-events: none;
+            /* Bu narsa rasmni ikki taraflama ko'rinishini ta'minlaydi */
+            backface-visibility: visible; 
         }
 
         .inspect-info {
@@ -315,9 +323,8 @@
         </div>
     </div>
 
-    <!-- --- 3D INSPECT MODAL (YANGILANGAN) --- -->
+    <!-- --- 3D INSPECT MODAL (True 3D Effect) --- -->
     <div id="inspect-modal">
-        <!-- Close Button -->
         <button class="back-btn" onclick="closeInspect()" style="top:30px; left:20px; z-index:500;">
             <i class="fas fa-times"></i> Close
         </button>
@@ -327,10 +334,11 @@
             <div style="color:#8b949e; font-size:16px; font-weight:bold;">Factory New</div>
         </div>
 
-        <!-- Touch Area -->
-        <div class="inspect-container" id="inspect-area">
-            <!-- Rasm -->
-            <img id="inspect-img-el" class="inspect-img" src="p250.png" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE'">
+        <!-- 3D Scene Container -->
+        <div class="inspect-scene" id="inspect-area">
+            <div class="gun-3d-group" id="gun-group">
+                <!-- Javascript will fill layers here for thickness -->
+            </div>
         </div>
 
         <div class="inspect-hint">
@@ -361,7 +369,6 @@
         tg.expand();
 
         // --- SKINS DATA ---
-        // P250 rasm fayli 'p250.png' bo'lishi shart.
         const CS2_SKINS = [
             { id: 1, name: "P250 | Sand Dune", rarity: "blue", img: "p250.png" },
             { id: 2, name: "MP9 | Storm", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
@@ -441,9 +448,9 @@
         const caseOpener = document.getElementById('case-opener');
         const caseContentsDiv = document.getElementById('case-contents');
         const inspectModal = document.getElementById('inspect-modal');
-        const inspectImgEl = document.getElementById('inspect-img-el');
         const inspectNameEl = document.getElementById('inspect-name');
         const inspectArea = document.getElementById('inspect-area');
+        const gunGroup = document.getElementById('gun-group');
 
         function openCaseViewer(type) {
             caseOpener.style.display = 'flex';
@@ -463,7 +470,7 @@
 
         function closeCaseViewer() { caseOpener.style.display = 'none'; }
 
-        // --- 3D ROTATION LOGIC ---
+        // --- 3D ROTATION LOGIC (LAYERING) ---
         let isDragging = false;
         let startX, startY;
         let currentRotateY = 0;
@@ -471,10 +478,34 @@
 
         function openInspect(skin) {
             inspectModal.style.display = 'flex';
-            inspectImgEl.src = skin.img;
             inspectNameEl.innerText = skin.name;
             inspectNameEl.style.color = getRarityColor(skin.rarity);
             
+            // Generate layers for "Thickness"
+            gunGroup.innerHTML = '';
+            const layersCount = 12; // Qancha ko'p bo'lsa shuncha qalin, lekin sekinlashishi mumkin
+            for(let i = 0; i < layersCount; i++) {
+                const layer = document.createElement('div');
+                layer.className = 'gun-layer';
+                layer.style.backgroundImage = `url('${skin.img}')`;
+                // Orqa fon xatosi bo'lsa
+                const fallbackUrl = "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE";
+                
+                // Rasmni yuklab bo'lmasa fallback qo'yish logikasi (CSS backgroundda qiyin, shuning uchun img ishlatish yaxshiroq edi, lekin layer uchun div qulay)
+                // Oddiy yechim:
+                if(skin.img.includes('http') === false && skin.img !== 'p250.png') {
+                     layer.style.backgroundImage = `url('${fallbackUrl}')`;
+                }
+                
+                // Har bir qatlamni 1px orqaga suramiz
+                layer.style.transform = `translateZ(-${i}px)`;
+                // Orqadagi qatlamlarni biroz qoraytirish (soya effekti uchun)
+                if(i > 0 && i < layersCount - 1) {
+                     layer.style.filter = 'brightness(0.7)';
+                }
+                gunGroup.appendChild(layer);
+            }
+
             // Reset position
             currentRotateY = 0;
             currentRotateX = 0;
@@ -503,7 +534,7 @@
 
         function drag(e) {
             if (!isDragging) return;
-            e.preventDefault(); // Scrollni to'xtatish
+            e.preventDefault(); 
 
             let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
             let clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
@@ -511,10 +542,9 @@
             let deltaX = clientX - startX;
             let deltaY = clientY - startY;
 
-            // X o'qi bo'yicha sursa -> Y o'qi bo'yicha aylanadi (o'ng-chap)
-            currentRotateY += deltaX * 0.5; 
-            // Y o'qi bo'yicha sursa -> X o'qi bo'yicha aylanadi (tepa-past)
-            currentRotateX -= deltaY * 0.5; 
+            // Aylanish tezligi
+            currentRotateY += deltaX * 0.8; 
+            currentRotateX -= deltaY * 0.8; 
 
             updateRotation();
 
@@ -527,8 +557,8 @@
         }
 
         function updateRotation() {
-            // Rasmni aylantirish
-            inspectImgEl.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+            // Butun guruhni aylantirish
+            gunGroup.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
         }
 
         // --- CASE SPIN ---
