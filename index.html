@@ -7,135 +7,120 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            background: radial-gradient(circle, #1b2838 0%, #05090f 100%);
-            color: white;
-            text-align: center;
-            font-family: 'Segoe UI', sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+            background: #0d1117; color: white; margin: 0; padding: 0;
+            font-family: 'Segoe UI', sans-serif; overflow: hidden;
         }
 
-        .balance-display {
-            font-size: 55px;
-            font-weight: 900;
-            color: #ffd700;
-            margin-bottom: 25px;
-            text-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
-            font-family: 'Impact', sans-serif;
-        }
+        /* Bo'limlar konteyneri */
+        .page { display: none; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 70px; box-sizing: border-box; }
+        .active { display: flex; }
 
-        /* Tanganing tashqi aylanasi */
-        .coin-wrapper {
-            width: 300px;
-            height: 300px;
-            border-radius: 50%; 
-            border: 6px solid #ffd700; /* Tilla rang hoshiya */
-            overflow: hidden; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 50px rgba(0, 123, 255, 0.6);
-            cursor: pointer;
-            transition: transform 0.05s ease;
-            position: relative;
-            background-color: #000;
-        }
+        /* Tanga (Mine) qismi */
+        .balance { font-size: 40px; color: #ffd700; margin-bottom: 20px; font-weight: bold; }
+        .coin-btn { width: 250px; height: 250px; border-radius: 50%; border: 5px solid #2c3e50; overflow: hidden; transition: transform 0.05s; }
+        .coin-btn:active { transform: scale(0.92); }
+        .coin-btn img { width: 440%; height: auto; } /* Boyagi kattalashtirish */
 
-        .coin-wrapper:active {
-            transform: scale(0.92);
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: #161b22; display: flex; justify-content: space-around;
+            align-items: center; border-top: 1px solid #30363d;
         }
+        .nav-item { text-align: center; color: #8b949e; cursor: pointer; flex: 1; font-size: 12px; }
+        .nav-item.active-nav { color: #58a6ff; font-weight: bold; }
+        .nav-item i { font-size: 24px; display: block; margin-bottom: 4px; }
 
-        /* RASMNI JUDA KATTA QILAMIZ - FAQAT MARKAZIY KO'K QISMI QOLADI */
-        #coin-img {
-            width: 440%; /* 440% qilib kattalashtirdim, shunda kataklar butkul yo'qoladi */
-            height: auto;
-            object-fit: contain;
-            user-select: none;
-            pointer-events: none;
-        }
-
-        .claim-btn {
-            margin-top: 50px;
-            padding: 16px 70px;
-            background: linear-gradient(135deg, #4CAF50 0%, #2e7d32 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .plus-text {
-            position: absolute;
-            color: #4efc03;
-            font-size: 35px;
-            font-weight: bold;
-            pointer-events: none;
-            animation: floatUp 0.6s ease-out forwards;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8);
-            z-index: 100;
-        }
-
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-150px); }
-        }
+        /* Boshqa sahifalar dizayni */
+        .card { background: #1c2128; width: 90%; margin: 10px 0; padding: 15px; border-radius: 10px; border: 1px solid #30363d; }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #58a6ff; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="balance-display">🪙 <span id="bal">0.0</span></div>
-
-    <div class="coin-wrapper" id="coin-btn">
-        <img src="coin.png" id="coin-img">
+    <!-- 1. MINE PAGE -->
+    <div id="mine" class="page active">
+        <div class="balance">🪙 <span id="user-bal">0.0</span></div>
+        <div class="coin-btn" onclick="handleTap(event)">
+            <img src="coin.png" alt="Coin">
+        </div>
+        <button onclick="saveEarnings()" style="margin-top: 20px; padding: 10px 30px; background: #238636; color: white; border: none; border-radius: 5px;">SAVE</button>
     </div>
 
-    <button class="claim-btn" onclick="finishGame()">CLAIM EARNINGS</button>
+    <!-- 2. SKINS PAGE -->
+    <div id="skins" class="page">
+        <h2>🛒 Skins Shop</h2>
+        <div class="card">🔫 AK-47 Nightwish - 1500 Coins</div>
+        <div class="card">🔪 Karambit Fade - 5000 Coins</div>
+        <div class="card">🧤 Sport Gloves - 3000 Coins</div>
+        <p>Contact Admin to buy!</p>
+    </div>
+
+    <!-- 3. INVITE PAGE -->
+    <div id="invite" class="page">
+        <h2>👥 Invite Friends</h2>
+        <div class="card">
+            <p>Get 50 coins for each friend!</p>
+            <button onclick="copyLink()" style="padding: 10px; width: 100%;">Copy Invite Link</button>
+        </div>
+    </div>
+
+    <!-- 4. ACCOUNT PAGE -->
+    <div id="account" class="page">
+        <h2>👤 Account</h2>
+        <img id="user-pic" class="avatar" src="https://via.placeholder.com/80" alt="Avatar">
+        <div class="card">
+            <p><b>Name:</b> <span id="user-name">User</span></p>
+            <p><b>ID:</b> <span id="user-id">00000000</span></p>
+        </div>
+        <button onclick="tg.close()" style="background: #da3633; color: white; border: none; padding: 10px 30px; border-radius: 5px;">LOGOUT</button>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+        <div class="nav-item active-nav" onclick="showPage('mine', this)"><i>⛏</i>Mine</div>
+        <div class="nav-item" onclick="showPage('skins', this)"><i>🛒</i>Skins</div>
+        <div class="nav-item" onclick="showPage('invite', this)"><i>👥</i>Invite</div>
+        <div class="nav-item" onclick="showPage('account', this)"><i>👤</i>Account</div>
+    </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
         let balance = 0;
 
-        const balText = document.getElementById('bal');
-        const coinBtn = document.getElementById('coin-btn');
-
-        coinBtn.addEventListener('click', (e) => {
-            balance += 0.1;
-            balText.innerText = balance.toFixed(1);
-
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-            // +0.1 effekti
-            const plus = document.createElement('div');
-            plus.innerText = '+0.1';
-            plus.className = 'plus-text';
-            
-            // Effektni bosilgan joyda chiqarish
-            plus.style.left = e.clientX - 25 + 'px';
-            plus.style.top = e.clientY - 50 + 'px';
-            
-            document.body.appendChild(plus);
-            setTimeout(() => plus.remove(), 600);
-        });
-
-        function finishGame() {
-            if (balance > 0) {
-                tg.sendData(balance.toFixed(1));
-            } else {
-                tg.close();
+        // Foydalanuvchi ma'lumotlarini yuklash
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
+            document.getElementById('user-id').innerText = tg.initDataUnsafe.user.id;
+            if (tg.initDataUnsafe.user.photo_url) {
+                document.getElementById('user-pic').src = tg.initDataUnsafe.user.photo_url;
             }
+        }
+
+        function showPage(pageId, navEl) {
+            // Hamma sahifalarni yopish
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            
+            // Tanlanganini ochish
+            document.getElementById(pageId).classList.add('active');
+            navEl.classList.add('active-nav');
+        }
+
+        function handleTap(e) {
+            balance += 0.1;
+            document.getElementById('user-bal').innerText = balance.toFixed(1);
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        }
+
+        function saveEarnings() {
+            if (balance > 0) tg.sendData(balance.toFixed(1));
+            else tg.close();
+        }
+
+        function copyLink() {
+            tg.showAlert("Invite link copied to clipboard! (Logic connected via bot)");
         }
     </script>
 </body>
