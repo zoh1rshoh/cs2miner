@@ -3,300 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CS2 Elite Miner</title>
+    <title>CS2 Mining Bot</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #ffffff;
+            --secondary-text: #8b949e;
+            --accent-color: #58a6ff;
+            --energy-bar-bg: #30363d;
+            --energy-fill: linear-gradient(90deg, #eebb00, #ff8800);
+            --nav-bg: #161b22;
+        }
 
         body {
-            background: radial-gradient(circle at center, #1b2838 0%, #0d1117 100%);
-            color: #fff;
             margin: 0;
+            padding: 0;
             font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             overflow: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
-        /* --- Header & Balance --- */
+        /* --- Header Section --- */
         .header {
-            text-align: center;
             padding-top: 20px;
+            text-align: center;
+            flex-shrink: 0;
         }
-        .balance-title {
+
+        .session-title {
             font-size: 14px;
-            color: #8b949e;
+            font-weight: 600;
+            color: var(--secondary-text);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
         }
-        .balance-cnt {
+
+        .session-balance {
             font-size: 48px;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            color: var(--text-color);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
-        .balance-cnt img { width: 40px; }
 
-        /* --- Main Coin Area --- */
-        .game-area {
-            height: 60vh;
+        /* --- Main Mining Area --- */
+        .mining-area {
+            flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
+            padding: 20px 0;
         }
-        
-        .coin-btn {
-            width: 260px;
-            height: 260px;
+
+        .coin-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Moviy aylananing porlashi */
+        .glow-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            background: radial-gradient(circle, #2a3b55, #161b22);
-            box-shadow: 0 0 30px rgba(88, 166, 255, 0.2), inset 0 0 20px rgba(0,0,0,0.5);
-            border: 4px solid #58a6ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            z-index: 10;
-        }
-        
-        .coin-btn:active {
-            transform: scale(0.95);
-        }
-        
-        .coin-btn img {
-            width: 80%;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 0 30px var(--accent-color), inset 0 0 20px rgba(88, 166, 255, 0.3);
             pointer-events: none;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
         }
 
-        /* --- Floating Numbers Animation --- */
+        /* Tanga tugmasi */
+        .coin-btn {
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            z-index: 10;
+            /* Tanga rasmi */
+            background-image: url('https://i.imgur.com/8Ql4y7X.png'); /* Bu yerga o'z rasmingiz manzilini qo'ying */
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .coin-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Uchib chiquvchi raqamlar animatsiyasi */
         .floater {
             position: absolute;
-            color: #fff;
+            color: var(--text-color);
             font-weight: bold;
-            font-size: 24px;
+            font-size: 28px;
             pointer-events: none;
             animation: floatUp 1s ease-out forwards;
             z-index: 20;
-            text-shadow: 0 0 5px #58a6ff;
+            text-shadow: 0 0 5px var(--accent-color);
         }
 
         @keyframes floatUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
+            100% { opacity: 0; transform: translateY(-120px) scale(1.2); }
         }
 
-        /* --- Energy Bar --- */
-        .energy-container {
-            width: 80%;
-            margin: 0 auto;
-            text-align: center;
+        /* --- Energy Section --- */
+        .energy-section {
+            padding: 0 30px 20px 30px;
+            flex-shrink: 0;
         }
+
         .energy-info {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
-            color: #8b949e;
-            margin-bottom: 5px;
-        }
-        .progress-bg {
-            width: 100%;
-            height: 12px;
-            background: #30363d;
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid #454c56;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(90deg, #eebb00, #ff8800);
-            box-shadow: 0 0 10px #ff8800;
-            transition: width 0.2s;
-        }
-
-        /* --- Controls --- */
-        .controls {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        
-        .btn {
-            background: rgba(30, 40, 50, 0.9);
-            border: 1px solid #58a6ff;
-            color: #58a6ff;
-            padding: 12px 25px;
-            border-radius: 12px;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: bold;
             font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            backdrop-filter: blur(5px);
+            font-weight: 600;
+            color: var(--secondary-text);
+            margin-bottom: 8px;
+        }
+
+        .energy-bar-bg {
+            width: 100%;
+            height: 14px;
+            background-color: var(--energy-bar-bg);
+            border-radius: 7px;
+            overflow: hidden;
+        }
+
+        .energy-fill {
+            height: 100%;
+            width: 100%; /* Boshlanishida to'la */
+            background: var(--energy-fill);
+            border-radius: 7px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 136, 0, 0.5);
+        }
+
+        /* --- Bottom Navigation --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--nav-bg);
+            padding: 10px 0;
+            border-top: 1px solid #30363d;
+            flex-shrink: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--secondary-text);
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
+            transition: color 0.2s;
+            width: 25%;
         }
 
-        .btn-primary {
-            background: #238636;
-            border-color: #2ea043;
-            color: white;
-            box-shadow: 0 0 15px rgba(46, 160, 67, 0.4);
+        .nav-item i {
+            font-size: 22px;
+            margin-bottom: 4px;
         }
 
-        /* --- Page Overlay (Simple) --- */
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(13, 17, 23, 0.95);
-            display: none; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 100;
-        }
-        .card {
-            background: #161b22; border: 1px solid #30363d;
-            padding: 20px; border-radius: 15px; width: 80%;
-            text-align: center; margin-bottom: 20px;
+        .nav-item.active {
+            color: var(--accent-color);
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="balance-title">Session Earnings</div>
-        <div class="balance-cnt">
-            <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="C">
-            <span id="score">0.00</span>
+        <div class="session-title">Session Earnings</div>
+        <div class="session-balance" id="score">150.50</div>
+    </div>
+
+    <div class="mining-area">
+        <div class="coin-container">
+            <div class="glow-ring"></div>
+            <div class="coin-btn" id="coinBtn"></div>
         </div>
     </div>
 
-    <div class="game-area">
-        <div class="coin-btn" id="coinBtn">
-            <img src="https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f" alt="CS2 Case">
-        </div>
-    </div>
-
-    <div class="energy-container">
+    <div class="energy-section">
         <div class="energy-info">
-            <span>⚡ Energy</span>
-            <span id="energy-txt">1000/1000</span>
+            <div><i class="fas fa-bolt" style="color: #ffaa00;"></i> Energy</div>
+            <div id="energy-txt">1000/1000</div>
         </div>
-        <div class="progress-bg">
-            <div class="progress-fill" id="energy-bar"></div>
+        <div class="energy-bar-bg">
+            <div class="energy-fill" id="energy-bar"></div>
         </div>
     </div>
 
-    <div class="controls">
-        <button class="btn" onclick="showInfo()">ℹ️ Help</button>
-        <button class="btn btn-primary" onclick="sendToBot()">📥 Claim to Bot</button>
-    </div>
-
-    <div id="infoOverlay" class="overlay">
-        <div class="card">
-            <h3>CS2 Miner</h3>
-            <p>Tap the case to mine coins. Send coins to the bot to buy skins!</p>
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="setActiveNav(this, 'mine')">
+            <i class="fas fa-gavel"></i>
+            <span>Mine</span>
         </div>
-        <button class="btn" onclick="document.getElementById('infoOverlay').style.display='none'">Close</button>
+        <div class="nav-item" onclick="setActiveNav(this, 'skins')">
+            <i class="fas fa-tshirt"></i>
+            <span>Skins</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'invite')">
+            <i class="fas fa-user-friends"></i>
+            <span>Invite Friends</span>
+        </div>
+        <div class="nav-item" onclick="setActiveNav(this, 'profile')">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Game Variables
-        let score = 0.00;
+        // O'yin o'zgaruvchilari
+        let score = 150.50;
         let energy = 1000;
         const maxEnergy = 1000;
-        const clickValue = 0.50; // Har bir bosishda qancha berilishi
+        const clickValue = 0.50; // Har bir bosishda qancha qo'shilishi
+        const energyCost = 5; // Har bir bosishda qancha energiya ketishi
 
-        // Elements
+        // Elementlarni olish
         const scoreEl = document.getElementById('score');
         const coinBtn = document.getElementById('coinBtn');
         const energyBar = document.getElementById('energy-bar');
         const energyTxt = document.getElementById('energy-txt');
 
-        // Tap Handler
-        coinBtn.addEventListener('touchstart', handleTap);
-        coinBtn.addEventListener('click', handleTap); // Desktop uchun
+        // Tanga bosish hodisasi
+        coinBtn.addEventListener('touchstart', handleTap, { passive: false });
+        coinBtn.addEventListener('click', handleTap);
 
         function handleTap(e) {
-            e.preventDefault(); // Ekranni qimirlab ketishini oldini olish
+            // Agar touch hodisasi bo'lsa, default harakatni to'xtatish (zoom va scrollni oldini olish uchun)
+            if (e.type === 'touchstart') {
+                 e.preventDefault();
+            }
             
-            if (energy <= 0) {
-                tg.showAlert("⚡ Not enough energy! Wait a bit.");
+            if (energy < energyCost) {
+                tg.showAlert("⚡ Not enough energy! Please wait.");
                 return;
             }
 
-            // Increase Score
+            // Hisobni va energiyani yangilash
             score += clickValue;
-            energy -= 5; // Har urishda 5 energiya ketadi
+            energy -= energyCost;
             updateUI();
 
-            // Haptic Feedback (Vibratsiya)
+            // Vibratsiya (Haptic Feedback)
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
 
-            // Floating Text Animation (Touch pointlarini olish)
+            // Animatsiya uchun bosilgan joy koordinatalarini olish
             let x, y;
             if (e.type === 'touchstart') {
-                x = e.touches[0].clientX;
-                y = e.touches[0].clientY;
+                const touch = e.touches[0] || e.changedTouches[0];
+                x = touch.clientX;
+                y = touch.clientY;
             } else {
                 x = e.clientX;
                 y = e.clientY;
             }
             createFloater(x, y);
+            
+            // Ma'lumotni botga yuborish (ixtiyoriy: har 10 marta bosganda yoki ma'lum vaqtda yuborish yaxshiroq)
+            // sendDataToBot(); 
         }
 
+        // Uchib chiquvchi raqam funksiyasi
         function createFloater(x, y) {
             const el = document.createElement('div');
             el.className = 'floater';
-            el.innerText = '+' + clickValue.toFixed(1);
-            el.style.left = x + 'px';
-            el.style.top = y + 'px';
+            el.innerText = '+' + clickValue.toFixed(2);
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
             document.body.appendChild(el);
 
             setTimeout(() => el.remove(), 1000);
         }
 
+        // UI ni yangilash funksiyasi
         function updateUI() {
             scoreEl.innerText = score.toFixed(2);
             energyTxt.innerText = `${energy}/${maxEnergy}`;
-            energyBar.style.width = (energy / maxEnergy * 100) + "%";
+            const energyPercent = (energy / maxEnergy) * 100;
+            energyBar.style.width = `${energyPercent}%`;
         }
 
-        // Energy Regeneration
+        // Energiyani qayta tiklash (har soniyada)
         setInterval(() => {
             if (energy < maxEnergy) {
-                energy += 10;
+                energy += 2; // Har soniyada 2 energiya qo'shiladi
                 if (energy > maxEnergy) energy = maxEnergy;
                 updateUI();
             }
         }, 1000);
-
-        function sendToBot() {
-            if (score <= 0) {
-                tg.showAlert("Start mining first!");
-                return;
-            }
-            tg.showConfirm(`Send ${score.toFixed(2)} coins to your balance?`, (confirmed) => {
-                if (confirmed) {
-                    tg.sendData(score.toFixed(2));
-                }
-            });
+        
+        // Ma'lumotni botga yuborish funksiyasi (Bot yopilayotganda chaqirilishi mumkin)
+        function sendDataToBot() {
+            tg.sendData(score.toFixed(2));
         }
         
-        function showInfo() {
-            document.getElementById('infoOverlay').style.display = 'flex';
+        // Bot yopilganda ma'lumotni saqlash
+        tg.onEvent('mainButtonClicked', sendDataToBot);
+        tg.onEvent('popupClosed', sendDataToBot);
+
+        // Navigatsiya menyusini boshqarish
+        function setActiveNav(element, section) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            // Bu yerda boshqa bo'limlarga o'tish logikasini yozishingiz mumkin
+            // Masalan: if(section === 'skins') { ... }
+            console.log("Navigated to:", section);
         }
+
+        // Boshlang'ich UI holatini o'rnatish
+        updateUI();
+
     </script>
 </body>
 </html>
