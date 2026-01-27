@@ -134,11 +134,9 @@
             border-bottom: 3px solid transparent; display: flex; flex-direction: column; align-items: center;
             cursor: pointer; position: relative;
         }
-        /* Inspect belgisi */
         .inspect-icon {
             position: absolute; top: 5px; right: 5px; color: #8b949e; font-size: 12px; opacity: 0.5;
         }
-        .skin-item:active { transform: scale(0.98); background: #1f293a; }
         .skin-item img { width: 90%; height: auto; margin-bottom: 5px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.05)); }
         .skin-name { font-size: 12px; color: #8b949e; line-height: 1.2; font-weight: 600; }
         
@@ -158,45 +156,42 @@
             width: 100%; max-width: 300px; cursor: pointer; box-shadow: 0 5px 15px rgba(35, 134, 54, 0.4);
         }
 
-        /* --- 360 INSPECT MODAL (YANGI) --- */
+        /* --- 3D INSPECT MODAL (YANGI) --- */
         #inspect-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #2a3441 0%, #0d1117 90%);
+            /* Orqa fon qoraytirildi, oq narsa yo'q */
+            background: radial-gradient(circle, #1a202c 0%, #000000 100%);
             z-index: 400; display: none; flex-direction: column; align-items: center; justify-content: center;
+            touch-action: none; /* Telefonda scroll bo'lib ketmasligi uchun */
         }
+        
         .inspect-container {
-            width: 100%; height: 60%; display: flex; align-items: center; justify-content: center;
-            perspective: 1000px; /* 3D effect */
+            width: 100%; height: 60%; 
+            display: flex; align-items: center; justify-content: center;
+            perspective: 1200px; /* 3D chuqurlik */
+            cursor: grab;
         }
+        
+        .inspect-container:active { cursor: grabbing; }
+
         .inspect-img {
-            width: 80%; max-width: 400px; height: auto;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
-            transition: transform 0.1s linear; /* Smooth manual rotation */
+            width: 90%; max-width: 500px; height: auto;
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.6)); /* Soya */
+            transition: transform 0.1s ease-out; /* Silliq harakat */
             transform-style: preserve-3d;
+            /* Agar rasmda oq fon bo'lsa, uni yo'q qilishga harakat qilamiz (shaffof PNG bo'lsa zo'r ishlaydi) */
+            background: transparent; 
         }
-        .auto-rotate {
-            animation: spin360 6s infinite linear;
-        }
-        @keyframes spin360 {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
-        }
+
         .inspect-info {
-            text-align: center; margin-bottom: 20px;
+            position: absolute; top: 80px; text-align: center; pointer-events: none;
         }
-        .inspect-name { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
-        .inspect-controls {
-            display: flex; gap: 15px; margin-top: 20px;
-        }
-        .inspect-btn {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;
-            padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: 'Rajdhani';
-        }
-        .inspect-slider-container {
-            width: 80%; margin-top: 20px; display: flex; align-items: center; justify-content: center;
-        }
-        input[type=range] {
-            width: 100%; accent-color: #58a6ff;
+        .inspect-name { font-size: 28px; font-weight: 800; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
+
+        .inspect-hint {
+            position: absolute; bottom: 50px; color: #8b949e; font-size: 14px;
+            background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px;
+            pointer-events: none;
         }
 
         /* Yutuq Modali */
@@ -256,12 +251,12 @@
         <h2 style="margin-top: 20px;">📦 CS2 Cases</h2>
         <div class="cases-grid">
             <div class="case-card" onclick="openCaseViewer('basic')">
-                <img src="basic_case.png" alt="Basic Case">
+                <img src="basic_case.png" alt="Basic Case" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f'">
                 <div class="case-title">Basic Case</div>
                 <div class="case-price">200 Coins</div>
             </div>
             <div class="case-card" onclick="tg.showAlert('Premium Case tez orada!')">
-                <img src="premium_case.png" style="opacity: 0.5;">
+                <img src="premium_case.png" style="opacity: 0.5;" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f'">
                 <div class="case-title">Premium Case</div>
                 <div class="case-price">500 Coins</div>
             </div>
@@ -301,12 +296,12 @@
     <div id="case-opener">
         <div class="opener-header">
             <button class="back-btn" onclick="closeCaseViewer()"><i class="fas fa-arrow-left"></i> Back</button>
-            <img src="basic_case.png" id="opener-img">
+            <img src="basic_case.png" id="opener-img" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f'">
             <h2 id="opener-title">Basic Case</h2>
         </div>
         
         <div style="text-align: center; margin-top: 10px; color: #8b949e; font-size: 12px; text-transform: uppercase;">
-            Tap item to Inspect 360°
+            Tap item to Inspect 3D
         </div>
         
         <div class="skins-list" id="case-contents">
@@ -320,28 +315,26 @@
         </div>
     </div>
 
-    <!-- --- 360 INSPECT MODAL --- -->
+    <!-- --- 3D INSPECT MODAL (YANGILANGAN) --- -->
     <div id="inspect-modal">
-        <div style="position:absolute; top:20px; left:20px; z-index:500;">
-            <button class="back-btn" onclick="closeInspect()"><i class="fas fa-times"></i> Close</button>
-        </div>
+        <!-- Close Button -->
+        <button class="back-btn" onclick="closeInspect()" style="top:30px; left:20px; z-index:500;">
+            <i class="fas fa-times"></i> Close
+        </button>
 
         <div class="inspect-info">
             <div id="inspect-name" class="inspect-name">P250 | Sand Dune</div>
-            <div style="color:#8b949e; font-size:14px;">Basic Grade Pistol</div>
+            <div style="color:#8b949e; font-size:16px; font-weight:bold;">Factory New</div>
         </div>
 
-        <div class="inspect-container">
-            <img id="inspect-img-el" class="inspect-img" src="p250.png">
+        <!-- Touch Area -->
+        <div class="inspect-container" id="inspect-area">
+            <!-- Rasm -->
+            <img id="inspect-img-el" class="inspect-img" src="p250.png" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE'">
         </div>
 
-        <div class="inspect-slider-container">
-            <span style="color:#8b949e; font-size:12px; margin-right:10px;">Rotate</span>
-            <input type="range" min="0" max="360" value="0" id="rotate-slider" oninput="manualRotate(this.value)">
-        </div>
-
-        <div class="inspect-controls">
-            <button class="inspect-btn" onclick="toggleAutoRotate()">🔄 Auto Spin</button>
+        <div class="inspect-hint">
+            <i class="fas fa-hand-pointer"></i> Drag to rotate 360°
         </div>
     </div>
 
@@ -368,22 +361,17 @@
         tg.expand();
 
         // --- SKINS DATA ---
-        // P250 Sand Dune uchun 'p250.png' ishlatiladi.
+        // P250 rasm fayli 'p250.png' bo'lishi shart.
         const CS2_SKINS = [
-            // BLUES (Common)
             { id: 1, name: "P250 | Sand Dune", rarity: "blue", img: "p250.png" },
             { id: 2, name: "MP9 | Storm", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
             { id: 3, name: "MAG-7 | Silver", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
-            // PURPLES
             { id: 4, name: "Glock-18 | Vogue", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
             { id: 5, name: "M4A4 | Evil Daimyo", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }, 
-            // PINKS
             { id: 6, name: "AWP | Atheris", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }, 
             { id: 7, name: "AK-47 | Redline", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
-            // REDS
             { id: 8, name: "AK-47 | Asiimov", rarity: "red", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
             { id: 9, name: "USP-S | Kill Confirmed", rarity: "red", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
-            // GOLD
             { id: 10, name: "★ Karambit | Fade", rarity: "gold", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }
         ];
 
@@ -455,7 +443,7 @@
         const inspectModal = document.getElementById('inspect-modal');
         const inspectImgEl = document.getElementById('inspect-img-el');
         const inspectNameEl = document.getElementById('inspect-name');
-        const rotateSlider = document.getElementById('rotate-slider');
+        const inspectArea = document.getElementById('inspect-area');
 
         function openCaseViewer(type) {
             caseOpener.style.display = 'flex';
@@ -465,8 +453,8 @@
                 item.className = `skin-item ${skin.rarity}`;
                 item.onclick = () => openInspect(skin);
                 item.innerHTML = `
-                    <div class="inspect-icon"><i class="fas fa-search"></i></div>
-                    <img src="${skin.img}" alt="Skin">
+                    <div class="inspect-icon"><i class="fas fa-cube"></i> 3D</div>
+                    <img src="${skin.img}" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE'">
                     <div class="skin-name" style="color:${getRarityColor(skin.rarity)}">${skin.name}</div>
                 `;
                 caseContentsDiv.appendChild(item);
@@ -475,34 +463,72 @@
 
         function closeCaseViewer() { caseOpener.style.display = 'none'; }
 
-        // --- INSPECT LOGIC ---
+        // --- 3D ROTATION LOGIC ---
+        let isDragging = false;
+        let startX, startY;
+        let currentRotateY = 0;
+        let currentRotateX = 0;
+
         function openInspect(skin) {
             inspectModal.style.display = 'flex';
             inspectImgEl.src = skin.img;
             inspectNameEl.innerText = skin.name;
             inspectNameEl.style.color = getRarityColor(skin.rarity);
             
-            // Reset
-            inspectImgEl.style.transform = 'rotateY(0deg)';
-            rotateSlider.value = 0;
-            inspectImgEl.classList.remove('auto-rotate');
+            // Reset position
+            currentRotateY = 0;
+            currentRotateX = 0;
+            updateRotation();
         }
 
         function closeInspect() {
             inspectModal.style.display = 'none';
         }
 
-        function manualRotate(val) {
-            inspectImgEl.classList.remove('auto-rotate');
-            inspectImgEl.style.transform = `rotateY(${val}deg)`;
+        // Touch & Mouse Events for Rotation
+        inspectArea.addEventListener('mousedown', startDrag);
+        inspectArea.addEventListener('touchstart', startDrag, {passive: false});
+
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, {passive: false});
+
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
         }
 
-        function toggleAutoRotate() {
-            if (inspectImgEl.classList.contains('auto-rotate')) {
-                inspectImgEl.classList.remove('auto-rotate');
-            } else {
-                inspectImgEl.classList.add('auto-rotate');
-            }
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault(); // Scrollni to'xtatish
+
+            let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            let clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+            let deltaX = clientX - startX;
+            let deltaY = clientY - startY;
+
+            // X o'qi bo'yicha sursa -> Y o'qi bo'yicha aylanadi (o'ng-chap)
+            currentRotateY += deltaX * 0.5; 
+            // Y o'qi bo'yicha sursa -> X o'qi bo'yicha aylanadi (tepa-past)
+            currentRotateX -= deltaY * 0.5; 
+
+            updateRotation();
+
+            startX = clientX;
+            startY = clientY;
+        }
+
+        function endDrag() {
+            isDragging = false;
+        }
+
+        function updateRotation() {
+            // Rasmni aylantirish
+            inspectImgEl.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
         }
 
         // --- CASE SPIN ---
@@ -569,7 +595,7 @@
                 item.className = `skin-item ${skin.rarity}`;
                 item.onclick = () => openInspect(skin);
                 item.innerHTML = `
-                    <img src="${skin.img}">
+                    <img src="${skin.img}" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE'">
                     <div class="skin-name" style="color:${getRarityColor(skin.rarity)}">${skin.name}</div>
                 `;
                 list.appendChild(item);
@@ -588,7 +614,7 @@
             bestEl.style.borderColor = color;
             bestEl.innerHTML = `
                 <div class="best-drop-label" style="color:${color}">Best Drop</div>
-                <img class="best-drop-img" src="${bestSkin.img}">
+                <img class="best-drop-img" src="${bestSkin.img}" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE'">
                 <div class="best-drop-name" style="color:${color}">${bestSkin.name}</div>
                 <div class="best-drop-case">Found in: Basic Case</div>
             `;
