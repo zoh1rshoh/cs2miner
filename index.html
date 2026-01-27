@@ -87,7 +87,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 50%; /* Kvadratni yo'qotish uchun */
         }
 
         .glow-ring {
@@ -103,17 +102,20 @@
         .coin-btn {
             width: 85%;
             height: 85%;
-            border-radius: 50%; /* Qat'iy dumaloq */
+            border-radius: 50%; /* Tanga dumaloq bo'lishi shart */
             cursor: pointer;
             transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
-            background-color: transparent; /* Orqa fon shaffof */
+            background-color: transparent; 
+            /* Rasm Githubdagi coin.png dan olinadi */
             background-image: url('coin.png'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            -webkit-mask-image: radial-gradient(circle, white 100%, black 100%); /* Qirralarni kesish */
+            /* Rasmni qirralarini kesish (kvadratlarni yo'qotish) */
+            overflow: hidden;
+            -webkit-mask-image: radial-gradient(circle, white 100%, black 100%);
             mask-image: radial-gradient(circle, white 100%, black 100%);
         }
 
@@ -186,11 +188,17 @@
             padding: 15px;
             text-align: center;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .case-card img {
-            width: 80%;
+            width: 100%;
             height: auto;
+            max-height: 100px;
+            object-fit: contain;
             margin-bottom: 10px;
             filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
         }
@@ -205,6 +213,7 @@
             color: #eebb00;
             font-weight: bold;
             margin-top: 5px;
+            font-size: 12px;
         }
 
         .placeholder-text {
@@ -251,7 +260,7 @@
     <div id="mine" class="page active">
         <div class="header">
             <div class="session-title">Balance</div>
-            <div class="session-balance" id="score">0.00</div>
+            <div class="session-balance" id="score">0</div>
         </div>
 
         <div class="mining-area">
@@ -276,26 +285,26 @@
         <h2 style="margin-top: 20px;">📦 CS2 Cases</h2>
         <div class="cases-grid">
             <div class="case-card">
-                <img src="case1.png" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f'" alt="Case">
+                <img src="basic_case.png" alt="Basic Case">
                 <div class="case-title">Basic Case</div>
-                <div class="case-price">1500 Coins</div>
+                <div class="case-price">200 Coins</div>
             </div>
             <div class="case-card">
-                <img src="case2.png" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f'" alt="Case">
+                <img src="premium_case.png" alt="Premium Case">
                 <div class="case-title">Premium Case</div>
-                <div class="case-price">2000 Coins</div>
+                <div class="case-price">400 Coins</div>
             </div>
         </div>
     </div>
 
     <div id="invite" class="page">
         <h2 style="margin-top: 20px;">👥 Invite Friends</h2>
-        <div class="placeholder-text">Invite system coming soon...</div>
+        <div class="placeholder-text">Invite system is working via Bot.</div>
     </div>
 
     <div id="profile" class="page">
         <h2 style="margin-top: 20px;">👤 My Profile</h2>
-        <div class="placeholder-text">User stats will appear here.</div>
+        <div class="placeholder-text">User stats loaded from Bot.</div>
     </div>
 
     <div class="bottom-nav">
@@ -322,29 +331,30 @@
         tg.expand();
 
         // --- SOZLAMALAR ---
-        const CLICK_VALUE = 1;      // 1 Tap = 1 Coin
-        const MAX_ENERGY = 100;     // Maksimal energiya 100
-        const ENERGY_REFILL_TIME = 3 * 60 * 60; // 3 soat (sekundlarda)
-        const REFILL_RATE = MAX_ENERGY / ENERGY_REFILL_TIME; // Sekundiga qancha energiya qo'shilishi
-        const DAILY_BONUS = 20;
+        const CLICK_VALUE = 1;          // 1 Tap = 1 Coin
+        const MAX_ENERGY = 100;         // Maksimal energiya 100
+        const ENERGY_REFILL_TIME = 10800; // 3 soat = 10800 sekund
+        const REFILL_RATE = MAX_ENERGY / ENERGY_REFILL_TIME; // Sekundiga qancha to'lishi
+        const DAILY_BONUS = 20;         // Kunlik bonus 20 coin
 
-        // --- BAZADAN O'QISH (LocalStorage) ---
+        // --- LOCAL STORAGE (Saqlash) ---
+        // Avvalgi ma'lumotlarni o'qiymiz
         let score = parseFloat(localStorage.getItem('cs2_score')) || 0;
         let energy = parseFloat(localStorage.getItem('cs2_energy')) || MAX_ENERGY;
         let lastLogin = parseInt(localStorage.getItem('cs2_last_time')) || Date.now();
         let lastBonusDate = localStorage.getItem('cs2_bonus_date') || "";
 
-        // --- OFFLINE VAQTI UCHUN ENERGIYANI HISOBLASH ---
+        // --- OFFLINE ENERGIYA HISOBLASH ---
+        // Foydalanuvchi yo'q payti qancha vaqt o'tganini hisoblaymiz
         const now = Date.now();
         const secondsPassed = (now - lastLogin) / 1000;
         
-        // Offline vaqtda qancha energiya yig'ilganini qo'shamiz
         if (secondsPassed > 0) {
             energy += secondsPassed * REFILL_RATE;
             if (energy > MAX_ENERGY) energy = MAX_ENERGY;
         }
 
-        // --- KUNLIK BONUS TEKSHIRISH (20 coin) ---
+        // --- KUNLIK BONUS (20 Coin) ---
         const todayDate = new Date().toDateString();
         if (lastBonusDate !== todayDate) {
             score += DAILY_BONUS;
@@ -358,10 +368,10 @@
         const energyBar = document.getElementById('energy-bar');
         const energyTxt = document.getElementById('energy-txt');
 
-        // Ekranni yangilash
+        // UI yangilash
         updateUI();
 
-        // Navigatsiya
+        // Navigatsiya funksiyasi
         function showPage(pageId, navEl) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
@@ -374,25 +384,29 @@
         coinBtn.addEventListener('click', handleTap);
 
         function handleTap(e) {
+            // Zoom bo'lib ketmasligi uchun
             if (e.type === 'touchstart') e.preventDefault();
 
-            if (energy >= 1) { // Kamida 1 energiya kerak
+            // Energiya yetarlimi?
+            if (energy >= 1) {
                 score += CLICK_VALUE;
                 energy -= 1;
                 updateUI();
-                saveData(); // Har urishda saqlaymiz
+                saveData(); // Darhol saqlaymiz
                 
+                // Vibratsiya
                 if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
                 
+                // Raqam uchish animatsiyasi
                 let x = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
                 let y = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
                 createFloater(x, y);
             } else {
-                // Energiya tugasa
-                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
             }
         }
 
+        // Uchib chiquvchi raqam (+1)
         function createFloater(x, y) {
             const el = document.createElement('div');
             el.className = 'floater';
@@ -403,33 +417,35 @@
             setTimeout(() => el.remove(), 800);
         }
 
+        // Ekranni yangilash
         function updateUI() {
-            scoreEl.innerText = Math.floor(score).toLocaleString(); // Butun son qilib ko'rsatish
+            scoreEl.innerText = Math.floor(score).toLocaleString(); 
             energyTxt.innerText = `${Math.floor(energy)}/${MAX_ENERGY}`;
             energyBar.style.width = (energy / MAX_ENERGY * 100) + "%";
         }
 
+        // Ma'lumotlarni xotiraga yozish
         function saveData() {
             localStorage.setItem('cs2_score', score);
             localStorage.setItem('cs2_energy', energy);
             localStorage.setItem('cs2_last_time', Date.now());
         }
 
-        // Har sekundda energiyani to'ldirish va saqlash
+        // Har sekundda energiyani to'ldirish
         setInterval(() => {
             if (energy < MAX_ENERGY) {
-                energy += REFILL_RATE; // 3 soatda 100 bo'lish tezligida
+                energy += REFILL_RATE;
                 if (energy > MAX_ENERGY) energy = MAX_ENERGY;
                 updateUI();
                 saveData();
             }
         }, 1000);
 
-        // Sahifa yopilayotganda ham saqlash
+        // Oynani yopganda saqlash
         window.addEventListener("beforeunload", saveData);
 
-        // Botga ma'lumot yuborish (ixtiyoriy)
-        tg.onEvent('mainButtonClicked', () => tg.sendData(score.toFixed(0)));
+        // Telegram Botga ma'lumot yuborish
+        tg.onEvent('mainButtonClicked', () => tg.sendData(Math.floor(score).toString()));
 
     </script>
 </body>
