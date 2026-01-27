@@ -7,11 +7,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            /* Fonni CS2 uslubida to'q ko'k-qora gradient qildim */
-            background: radial-gradient(circle, #1b2838 0%, #05090f 100%);
+            background: #0d1117; /* To'q qora fon */
             color: white;
             text-align: center;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
             height: 100vh;
             margin: 0;
             display: flex;
@@ -19,119 +18,94 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            user-select: none;
-            -webkit-user-select: none;
         }
 
-        .balance-container {
-            font-size: 45px;
-            font-weight: 800;
+        .balance {
+            font-size: 40px;
             color: #ffd700;
-            margin-bottom: 40px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 20px;
         }
 
-        .coin-area {
-            position: relative;
-            display: inline-block;
+        .coin-wrapper {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%; /* Rasmni aylana qilish */
+            overflow: hidden; /* Aylana tashqarisini yashirish (kataklar o'chadi) */
+            border: 5px solid #1f2937;
+            box-shadow: 0 0 30px rgba(0, 123, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-            transition: transform 0.05s ease-out;
+            transition: transform 0.05s;
         }
 
-        /* Tanga bosilganda kichrayish effekti */
-        .coin-area:active {
-            transform: scale(0.90);
+        .coin-wrapper:active {
+            transform: scale(0.92);
         }
 
         #coin-img {
-            width: 280px; /* Tanga hajmi */
-            height: 280px;
-            object-fit: contain;
-            /* Tanganing atrofiga nur taralishi (Glow) */
-            filter: drop-shadow(0 0 25px rgba(0, 123, 255, 0.5));
+            width: 105%; /* Biroz kattaroq qilib qirralarni yopamiz */
+            height: 105%;
+            object-fit: cover;
         }
 
         .save-btn {
-            margin-top: 60px;
-            padding: 18px 60px;
-            background: linear-gradient(135deg, #4CAF50 0%, #2e7d32 100%);
+            margin-top: 40px;
+            padding: 15px 40px;
+            background: #238636;
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 22px;
+            border-radius: 8px;
+            font-size: 20px;
             font-weight: bold;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        /* Tanga bosilganda chiquvchi +0.1 matni */
-        .plus-animation {
+        .plus {
             position: absolute;
-            color: #00ff00;
-            font-size: 28px;
+            color: #4efc03;
             font-weight: bold;
-            pointer-events: none;
-            animation: moveUp 0.6s ease-out forwards;
-            text-shadow: 0 0 10px rgba(0,255,0,0.5);
+            animation: up 0.5s ease-out forwards;
         }
-
-        @keyframes moveUp {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-120px); }
+        @keyframes up {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-100px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="balance-container">🪙 <span id="balance">0.0</span></div>
+    <div class="balance">🪙 <span id="bal">0.0</span></div>
 
-    <div class="coin-area" id="coin-click">
-        <!-- Rasmingiz nomi aniq coin.png bo'lishi kerak -->
-        <img src="coin.png" id="coin-img" alt="CS2 Coin">
+    <div class="coin-wrapper" onclick="tap(event)">
+        <img src="coin.png" id="coin-img">
     </div>
 
-    <button class="save-btn" onclick="collectEarnings()">CLAIM EARNINGS</button>
+    <button class="save-btn" onclick="send()">CLAIM EARNINGS</button>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        
-        let balance = 0;
-        const balanceText = document.getElementById('balance');
-        const coinArea = document.getElementById('coin-click');
+        let count = 0;
 
-        coinArea.addEventListener('click', (event) => {
-            balance += 0.1;
-            balanceText.innerText = balance.toFixed(1);
-
-            // Telefon tebranishi
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-
-            // +0.1 effekti
-            createPlusEffect(event.clientX, event.clientY);
-        });
-
-        function createPlusEffect(x, y) {
-            const el = document.createElement('div');
-            el.innerText = '+0.1';
-            el.className = 'plus-animation';
-            el.style.left = (x - 20) + 'px';
-            el.style.top = (y - 50) + 'px';
-            document.body.appendChild(el);
+        function tap(e) {
+            count += 0.1;
+            document.getElementById('bal').innerText = count.toFixed(1);
             
-            setTimeout(() => { el.remove(); }, 600);
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+            let p = document.createElement('div');
+            p.innerText = '+0.1';
+            p.className = 'plus';
+            p.style.left = e.clientX + 'px';
+            p.style.top = e.clientY + 'px';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 500);
         }
 
-        function collectEarnings() {
-            if (balance > 0) {
-                tg.sendData(balance.toFixed(1));
-            } else {
-                tg.close();
-            }
+        function send() {
+            if (count > 0) tg.sendData(count.toFixed(1));
+            else tg.close();
         }
     </script>
 </body>
