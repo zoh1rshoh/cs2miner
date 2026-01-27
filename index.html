@@ -35,7 +35,6 @@
             height: 100vh;
         }
 
-        /* --- PAGES (Bo'limlar) --- */
         .page {
             display: none;
             flex-direction: column;
@@ -49,7 +48,7 @@
             display: flex;
         }
 
-        /* --- MINE PAGE STYLES --- */
+        /* --- MINE PAGE --- */
         .header {
             padding-top: 30px;
             text-align: center;
@@ -65,7 +64,6 @@
             margin-bottom: 5px;
         }
 
-        /* F harfi olib tashlandi, faqat raqam qoldi */
         .session-balance {
             font-size: 52px;
             font-weight: 700;
@@ -89,9 +87,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 50%; /* Kvadratni yo'qotish uchun */
         }
 
-        /* Siz tashlagan ko'k aylananing effekti */
         .glow-ring {
             position: absolute;
             width: 100%;
@@ -105,16 +103,18 @@
         .coin-btn {
             width: 85%;
             height: 85%;
-            border-radius: 50%;
+            border-radius: 50%; /* Qat'iy dumaloq */
             cursor: pointer;
             transition: transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
-            /* DIQQAT: Rasmni GitHubga 'coin.png' nomi bilan yuklang */
+            background-color: transparent; /* Orqa fon shaffof */
             background-image: url('coin.png'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            -webkit-mask-image: radial-gradient(circle, white 100%, black 100%); /* Qirralarni kesish */
+            mask-image: radial-gradient(circle, white 100%, black 100%);
         }
 
         .coin-btn:active {
@@ -169,7 +169,7 @@
             box-shadow: 0 0 10px rgba(255, 136, 0, 0.4);
         }
 
-        /* --- CASES PAGE STYLES --- */
+        /* --- CASES PAGE --- */
         .cases-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -207,7 +207,6 @@
             margin-top: 5px;
         }
 
-        /* --- OTHER PAGES --- */
         .placeholder-text {
             margin-top: 50px;
             color: var(--secondary-text);
@@ -222,7 +221,7 @@
             padding: 12px 0;
             border-top: 1px solid #30363d;
             flex-shrink: 0;
-            padding-bottom: 25px; /* iPhone uchun joy */
+            padding-bottom: 25px;
         }
 
         .nav-item {
@@ -265,7 +264,7 @@
         <div class="energy-section">
             <div class="energy-info">
                 <div><i class="fas fa-bolt" style="color: #ffaa00;"></i> Energy</div>
-                <div id="energy-txt">1000/1000</div>
+                <div id="energy-txt">100/100</div>
             </div>
             <div class="energy-bar-bg">
                 <div class="energy-fill" id="energy-bar"></div>
@@ -277,13 +276,13 @@
         <h2 style="margin-top: 20px;">📦 CS2 Cases</h2>
         <div class="cases-grid">
             <div class="case-card">
-                <img src="https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f" alt="Case">
-                <div class="case-title">Revolution Case</div>
+                <img src="case1.png" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f'" alt="Case">
+                <div class="case-title">Basic Case</div>
                 <div class="case-price">1500 Coins</div>
             </div>
             <div class="case-card">
-                <img src="https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f" alt="Case">
-                <div class="case-title">Dreams & Nightmares</div>
+                <img src="case2.png" onerror="this.src='https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFYynaSdJGhE74y0w9bbxqf1Z-RXwzgGsMB027iTp9ms3Qzi_xFtZzymJoLBcQE5MlvWr1VvQ6OY/360fx360f'" alt="Case">
+                <div class="case-title">Premium Case</div>
                 <div class="case-price">2000 Coins</div>
             </div>
         </div>
@@ -322,23 +321,50 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let score = 0.00;
-        let energy = 1000;
-        const maxEnergy = 1000;
+        // --- SOZLAMALAR ---
+        const CLICK_VALUE = 1;      // 1 Tap = 1 Coin
+        const MAX_ENERGY = 100;     // Maksimal energiya 100
+        const ENERGY_REFILL_TIME = 3 * 60 * 60; // 3 soat (sekundlarda)
+        const REFILL_RATE = MAX_ENERGY / ENERGY_REFILL_TIME; // Sekundiga qancha energiya qo'shilishi
+        const DAILY_BONUS = 20;
 
+        // --- BAZADAN O'QISH (LocalStorage) ---
+        let score = parseFloat(localStorage.getItem('cs2_score')) || 0;
+        let energy = parseFloat(localStorage.getItem('cs2_energy')) || MAX_ENERGY;
+        let lastLogin = parseInt(localStorage.getItem('cs2_last_time')) || Date.now();
+        let lastBonusDate = localStorage.getItem('cs2_bonus_date') || "";
+
+        // --- OFFLINE VAQTI UCHUN ENERGIYANI HISOBLASH ---
+        const now = Date.now();
+        const secondsPassed = (now - lastLogin) / 1000;
+        
+        // Offline vaqtda qancha energiya yig'ilganini qo'shamiz
+        if (secondsPassed > 0) {
+            energy += secondsPassed * REFILL_RATE;
+            if (energy > MAX_ENERGY) energy = MAX_ENERGY;
+        }
+
+        // --- KUNLIK BONUS TEKSHIRISH (20 coin) ---
+        const todayDate = new Date().toDateString();
+        if (lastBonusDate !== todayDate) {
+            score += DAILY_BONUS;
+            localStorage.setItem('cs2_bonus_date', todayDate);
+            tg.showAlert(`🎁 Daily Bonus: +${DAILY_BONUS} coins!`);
+        }
+
+        // Elementlar
         const scoreEl = document.getElementById('score');
         const coinBtn = document.getElementById('coinBtn');
         const energyBar = document.getElementById('energy-bar');
         const energyTxt = document.getElementById('energy-txt');
 
-        // Navigatsiya logikasi
+        // Ekranni yangilash
+        updateUI();
+
+        // Navigatsiya
         function showPage(pageId, navEl) {
-            // Hamma sahifalarni yashirish
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Nav tugmalarni o'chirish
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-            
-            // Tanlanganini yoqish
             document.getElementById(pageId).classList.add('active');
             navEl.classList.add('active-nav');
         }
@@ -350,25 +376,27 @@
         function handleTap(e) {
             if (e.type === 'touchstart') e.preventDefault();
 
-            if (energy > 0) {
-                score += 0.50;
-                energy -= 5;
+            if (energy >= 1) { // Kamida 1 energiya kerak
+                score += CLICK_VALUE;
+                energy -= 1;
                 updateUI();
+                saveData(); // Har urishda saqlaymiz
                 
-                // Animatsiya
                 if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
                 
-                // Raqam uchishi
                 let x = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
                 let y = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
                 createFloater(x, y);
+            } else {
+                // Energiya tugasa
+                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
             }
         }
 
         function createFloater(x, y) {
             const el = document.createElement('div');
             el.className = 'floater';
-            el.innerText = '+0.50';
+            el.innerText = '+' + CLICK_VALUE;
             el.style.left = `${x}px`;
             el.style.top = `${y}px`;
             document.body.appendChild(el);
@@ -376,21 +404,32 @@
         }
 
         function updateUI() {
-            scoreEl.innerText = score.toFixed(2);
-            energyTxt.innerText = `${energy}/${maxEnergy}`;
-            energyBar.style.width = (energy / maxEnergy * 100) + "%";
+            scoreEl.innerText = Math.floor(score).toLocaleString(); // Butun son qilib ko'rsatish
+            energyTxt.innerText = `${Math.floor(energy)}/${MAX_ENERGY}`;
+            energyBar.style.width = (energy / MAX_ENERGY * 100) + "%";
         }
 
-        // Energiya to'ldirish
+        function saveData() {
+            localStorage.setItem('cs2_score', score);
+            localStorage.setItem('cs2_energy', energy);
+            localStorage.setItem('cs2_last_time', Date.now());
+        }
+
+        // Har sekundda energiyani to'ldirish va saqlash
         setInterval(() => {
-            if (energy < maxEnergy) {
-                energy += 2;
+            if (energy < MAX_ENERGY) {
+                energy += REFILL_RATE; // 3 soatda 100 bo'lish tezligida
+                if (energy > MAX_ENERGY) energy = MAX_ENERGY;
                 updateUI();
+                saveData();
             }
         }, 1000);
 
-        // Saqlash (demo)
-        tg.onEvent('mainButtonClicked', () => tg.sendData(score.toFixed(2)));
+        // Sahifa yopilayotganda ham saqlash
+        window.addEventListener("beforeunload", saveData);
+
+        // Botga ma'lumot yuborish (ixtiyoriy)
+        tg.onEvent('mainButtonClicked', () => tg.sendData(score.toFixed(0)));
 
     </script>
 </body>
