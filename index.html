@@ -7,10 +7,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            background: #0d1117; /* To'q qora fon */
+            background: radial-gradient(circle, #1b2838 0%, #05090f 100%);
             color: white;
             text-align: center;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             height: 100vh;
             margin: 0;
             display: flex;
@@ -18,93 +18,112 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            user-select: none;
         }
 
-        .balance {
-            font-size: 40px;
+        .balance-display {
+            font-size: 50px;
+            font-weight: bold;
             color: #ffd700;
             margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
 
+        /* Tanganing tashqi chegarasi (Aylana qilib qirqish shu yerda) */
         .coin-wrapper {
-            width: 260px;
-            height: 260px;
-            border-radius: 50%; /* Rasmni aylana qilish */
-            overflow: hidden; /* Aylana tashqarisini yashirish (kataklar o'chadi) */
-            border: 5px solid #1f2937;
-            box-shadow: 0 0 30px rgba(0, 123, 255, 0.3);
+            width: 280px;
+            height: 280px;
+            border-radius: 50%; /* Aylana qiladi */
+            border: 8px solid #2c3e50;
+            overflow: hidden; /* Aylana tashqarisidagi hamma narsani (kataklarni) yashiradi */
             display: flex;
             justify-content: center;
             align-items: center;
+            box-shadow: 0 0 40px rgba(0, 123, 255, 0.4);
             cursor: pointer;
             transition: transform 0.05s;
+            position: relative;
         }
 
         .coin-wrapper:active {
             transform: scale(0.92);
         }
 
+        /* Rasmni o'zini kattalashtirib, faqat tanganing o'zini markazga qo'yamiz */
         #coin-img {
-            width: 105%; /* Biroz kattaroq qilib qirralarni yopamiz */
-            height: 105%;
-            object-fit: cover;
+            width: 180%; /* Rasmni kattalashtiramizki, kataklar chetda qolsin */
+            height: auto;
+            object-fit: contain;
+            user-drag: none;
+            -webkit-user-drag: none;
         }
 
-        .save-btn {
-            margin-top: 40px;
-            padding: 15px 40px;
-            background: #238636;
+        .claim-btn {
+            margin-top: 50px;
+            padding: 15px 60px;
+            background: linear-gradient(135deg, #4CAF50 0%, #2e7d32 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 20px;
+            border-radius: 12px;
+            font-size: 22px;
             font-weight: bold;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            cursor: pointer;
+            text-transform: uppercase;
         }
 
-        .plus {
+        .plus-text {
             position: absolute;
-            color: #4efc03;
+            color: #00ff00;
+            font-size: 30px;
             font-weight: bold;
-            animation: up 0.5s ease-out forwards;
+            pointer-events: none;
+            animation: floatUp 0.6s ease-out forwards;
         }
-        @keyframes up {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-100px); }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-120px); }
         }
     </style>
 </head>
 <body>
 
-    <div class="balance">🪙 <span id="bal">0.0</span></div>
+    <div class="balance-display">🪙 <span id="bal">0.0</span></div>
 
-    <div class="coin-wrapper" onclick="tap(event)">
+    <div class="coin-wrapper" id="coin-btn">
+        <!-- Rasmingiz nomi coin.png bo'lishi shart -->
         <img src="coin.png" id="coin-img">
     </div>
 
-    <button class="save-btn" onclick="send()">CLAIM EARNINGS</button>
+    <button class="claim-btn" onclick="finish()">CLAIM EARNINGS</button>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        let count = 0;
+        let balance = 0;
 
-        function tap(e) {
-            count += 0.1;
-            document.getElementById('bal').innerText = count.toFixed(1);
-            
+        const coinBtn = document.getElementById('coin-btn');
+        const balText = document.getElementById('bal');
+
+        coinBtn.addEventListener('click', (e) => {
+            balance += 0.1;
+            balText.innerText = balance.toFixed(1);
+
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
-            let p = document.createElement('div');
-            p.innerText = '+0.1';
-            p.className = 'plus';
-            p.style.left = e.clientX + 'px';
-            p.style.top = e.clientY + 'px';
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 500);
-        }
+            // Effekt yaratish
+            const plus = document.createElement('div');
+            plus.innerText = '+0.1';
+            plus.className = 'plus-text';
+            plus.style.left = e.clientX - 20 + 'px';
+            plus.style.top = e.clientY - 40 + 'px';
+            document.body.appendChild(plus);
+            setTimeout(() => plus.remove(), 600);
+        });
 
-        function send() {
-            if (count > 0) tg.sendData(count.toFixed(1));
+        function finish() {
+            if (balance > 0) tg.sendData(balance.toFixed(1));
             else tg.close();
         }
     </script>
