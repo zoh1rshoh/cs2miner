@@ -7,10 +7,11 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            background: radial-gradient(circle, #1b2838 0%, #000000 100%);
+            /* Fonni CS2 uslubida to'q ko'k-qora gradient qildim */
+            background: radial-gradient(circle, #1b2838 0%, #05090f 100%);
             color: white;
             text-align: center;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             height: 100vh;
             margin: 0;
             display: flex;
@@ -19,60 +20,68 @@
             align-items: center;
             overflow: hidden;
             user-select: none;
+            -webkit-user-select: none;
         }
 
         .balance-container {
-            font-size: 40px;
-            font-weight: bold;
+            font-size: 45px;
+            font-weight: 800;
             color: #ffd700;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            font-family: 'Courier New', Courier, monospace;
         }
 
-        .coin-container {
+        .coin-area {
             position: relative;
             display: inline-block;
             cursor: pointer;
-            transition: transform 0.05s;
             -webkit-tap-highlight-color: transparent;
+            transition: transform 0.05s ease-out;
         }
 
-        .coin-container:active {
-            transform: scale(0.92);
+        /* Tanga bosilganda kichrayish effekti */
+        .coin-area:active {
+            transform: scale(0.90);
         }
 
         #coin-img {
-            width: 250px; /* Tanga hajmi */
-            height: 250px;
-            filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.4));
+            width: 280px; /* Tanga hajmi */
+            height: 280px;
+            object-fit: contain;
+            /* Tanganing atrofiga nur taralishi (Glow) */
+            filter: drop-shadow(0 0 25px rgba(0, 123, 255, 0.5));
         }
 
         .save-btn {
-            margin-top: 50px;
-            padding: 15px 50px;
+            margin-top: 60px;
+            padding: 18px 60px;
             background: linear-gradient(135deg, #4CAF50 0%, #2e7d32 100%);
             color: white;
             border: none;
-            border-radius: 50px;
-            font-size: 20px;
+            border-radius: 12px;
+            font-size: 22px;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Tanga bosilganda chiqadigan +0.1 effekti */
-        .plus-one {
+        /* Tanga bosilganda chiquvchi +0.1 matni */
+        .plus-animation {
             position: absolute;
-            color: #ffd700;
-            font-size: 24px;
+            color: #00ff00;
+            font-size: 28px;
             font-weight: bold;
-            animation: floatUp 0.5s ease-out forwards;
             pointer-events: none;
+            animation: moveUp 0.6s ease-out forwards;
+            text-shadow: 0 0 10px rgba(0,255,0,0.5);
         }
 
-        @keyframes floatUp {
+        @keyframes moveUp {
             0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-100px); }
+            100% { opacity: 0; transform: translateY(-120px); }
         }
     </style>
 </head>
@@ -80,40 +89,44 @@
 
     <div class="balance-container">🪙 <span id="balance">0.0</span></div>
 
-    <div class="coin-container" id="coin-area">
-        <!-- Yuklangan rasmingiz nomi coin.png bo'lishi kerak -->
+    <div class="coin-area" id="coin-click">
+        <!-- Rasmingiz nomi aniq coin.png bo'lishi kerak -->
         <img src="coin.png" id="coin-img" alt="CS2 Coin">
     </div>
 
-    <button class="save-btn" onclick="saveAndExit()">CLAIM EARNINGS</button>
+    <button class="save-btn" onclick="collectEarnings()">CLAIM EARNINGS</button>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
         
         let balance = 0;
-        const balanceDisplay = document.getElementById('balance');
-        const coinArea = document.getElementById('coin-area');
+        const balanceText = document.getElementById('balance');
+        const coinArea = document.getElementById('coin-click');
 
-        coinArea.addEventListener('click', (e) => {
+        coinArea.addEventListener('click', (event) => {
             balance += 0.1;
-            balanceDisplay.innerText = balance.toFixed(1);
+            balanceText.innerText = balance.toFixed(1);
 
-            // Vibratsiya
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+            // Telefon tebranishi
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 
-            // +0.1 effekti yaratish
-            const plus = document.createElement('div');
-            plus.innerText = '+0.1';
-            plus.className = 'plus-one';
-            plus.style.left = e.clientX - 20 + 'px';
-            plus.style.top = e.clientY - 40 + 'px';
-            document.body.appendChild(plus);
-
-            setTimeout(() => { plus.remove(); }, 500);
+            // +0.1 effekti
+            createPlusEffect(event.clientX, event.clientY);
         });
 
-        function saveAndExit() {
+        function createPlusEffect(x, y) {
+            const el = document.createElement('div');
+            el.innerText = '+0.1';
+            el.className = 'plus-animation';
+            el.style.left = (x - 20) + 'px';
+            el.style.top = (y - 50) + 'px';
+            document.body.appendChild(el);
+            
+            setTimeout(() => { el.remove(); }, 600);
+        }
+
+        function collectEarnings() {
             if (balance > 0) {
                 tg.sendData(balance.toFixed(1));
             } else {
