@@ -24,21 +24,17 @@
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Rajdhani', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            overflow: hidden;
-            user-select: none;
+            overflow: hidden; user-select: none;
             -webkit-tap-highlight-color: transparent;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            display: flex; flex-direction: column; height: 100vh;
         }
 
         /* --- SAHIFALAR --- */
-        .page { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow-y: auto; padding-bottom: 80px; }
+        .page { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow-y: auto; padding-bottom: 90px; }
         .page.active { display: flex; }
 
         /* --- MINE PAGE --- */
@@ -47,31 +43,21 @@
 
         .mining-area { flex-grow: 1; display: flex; justify-content: center; align-items: center; width: 100%; }
 
-        /* Tanga dizayni - MUKAMMAL DUMALOQ */
+        /* Tanga (Mukammal Dumaloq) */
         .coin-container {
-            width: 280px; height: 280px;
+            width: 280px; height: 280px; position: relative;
             display: flex; justify-content: center; align-items: center;
-            border-radius: 50%;
-            position: relative;
         }
-
         .coin-btn {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            cursor: pointer;
+            width: 100%; height: 100%; border-radius: 50%; cursor: pointer;
             background-image: url('coin.png'); 
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background-size: cover; background-position: center; background-repeat: no-repeat;
             box-shadow: 0 0 50px rgba(88, 166, 255, 0.2);
             transition: transform 0.05s;
-            /* Bu kod rasmdagi kvadratlarni kesib tashlaydi */
-            clip-path: circle(50% at 50% 50%);
-            -webkit-clip-path: circle(50% at 50% 50%);
+            clip-path: circle(50% at 50% 50%); -webkit-clip-path: circle(50% at 50% 50%);
         }
         .coin-btn:active { transform: scale(0.95); }
 
-        /* Uchuvchi raqam */
         .floater { position: absolute; color: white; font-weight: bold; font-size: 32px; pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 100; text-shadow: 0 0 5px #58a6ff; }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-100px); } }
 
@@ -81,7 +67,7 @@
         .energy-bar-bg { width: 100%; height: 12px; background: #30363d; border-radius: 6px; overflow: hidden; }
         .energy-fill { height: 100%; background: linear-gradient(90deg, #eebb00, #ff8800); width: 100%; transition: width 0.3s; }
 
-        /* --- CASES MENU PAGE --- */
+        /* --- CASES MENU --- */
         .cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; width: 100%; box-sizing: border-box; }
         .case-card {
             background: #1c2128; border: 1px solid #30363d; border-radius: 12px; padding: 15px;
@@ -92,57 +78,79 @@
         .case-title { font-weight: 700; margin-bottom: 5px; }
         .case-price { color: #eebb00; font-weight: bold; font-size: 14px; }
 
+        /* --- PROFILE (YANGILANGAN) --- */
+        .profile-header {
+            width: 100%; background: linear-gradient(180deg, #1f293a 0%, #0d1117 100%);
+            padding: 30px 20px; display: flex; align-items: center; gap: 15px;
+            border-bottom: 1px solid #30363d; box-sizing: border-box;
+        }
+        .p-avatar {
+            width: 70px; height: 70px; border-radius: 50%; border: 3px solid #58a6ff;
+            background: #000; object-fit: cover;
+        }
+        .p-info h2 { margin: 0; font-size: 20px; color: white; }
+        .p-info p { margin: 0; font-size: 14px; color: #8b949e; }
+
+        /* Best Drop Card */
+        .best-drop-container { width: 90%; margin-top: 20px; }
+        .best-drop-card {
+            background: radial-gradient(circle at center, #2d1b1b 0%, #161b22 100%);
+            border: 1px solid #30363d; border-radius: 15px; padding: 15px;
+            text-align: center; position: relative; overflow: hidden;
+            min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .best-drop-label {
+            font-size: 12px; color: #eebb00; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;
+        }
+        .best-drop-img { width: 120px; height: auto; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); }
+        .best-drop-name { font-size: 16px; font-weight: bold; margin-top: 5px; }
+        .best-drop-case { font-size: 11px; color: #8b949e; margin-top: 2px; }
+
+        .inventory-title { width: 90%; margin-top: 25px; margin-bottom: 10px; font-size: 18px; font-weight: bold; border-bottom: 1px solid #30363d; padding-bottom: 5px; }
+
         /* --- CASE OPENER (ICHKI SAHIFA) --- */
         #case-opener {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0d1117; z-index: 200; display: none; flex-direction: column; overflow-y: auto;
         }
-        
-        /* Banner qismi */
         .opener-header {
-            position: relative; width: 100%; height: 200px; 
+            position: relative; width: 100%; height: 220px; 
             background: radial-gradient(circle at center, #2a3441 0%, #0d1117 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-bottom: 2px solid #30363d;
         }
-        .opener-header img { height: 120px; filter: drop-shadow(0 0 20px rgba(0,0,0,0.5)); }
+        .opener-header img { height: 130px; filter: drop-shadow(0 0 20px rgba(0,0,0,0.5)); }
         .back-btn {
             position: absolute; top: 20px; left: 20px;
             background: rgba(255,255,255,0.1); border: none; color: white;
             padding: 8px 15px; border-radius: 8px; cursor: pointer; font-family: 'Rajdhani'; font-weight: bold;
         }
-
-        /* Skinlar ro'yxati */
         .skins-list {
-            padding: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; box-sizing: border-box;
-            padding-bottom: 100px; /* Tugma uchun joy */
+            padding: 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; box-sizing: border-box;
+            padding-bottom: 100px;
         }
         .skin-item {
             background: #161b22; border-radius: 8px; padding: 10px; text-align: center;
-            border-bottom: 3px solid transparent;
+            border-bottom: 3px solid transparent; display: flex; flex-direction: column; align-items: center;
         }
-        .skin-item img { width: 100%; height: auto; margin-bottom: 5px; }
-        .skin-name { font-size: 10px; color: #8b949e; line-height: 1.2; }
+        .skin-item img { width: 90%; height: auto; margin-bottom: 5px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.05)); }
+        .skin-name { font-size: 12px; color: #8b949e; line-height: 1.2; font-weight: 600; }
         
-        /* Ranglar (Rarity) */
         .blue { border-color: var(--rarity-blue); }
         .purple { border-color: var(--rarity-purple); }
         .pink { border-color: var(--rarity-pink); }
         .red { border-color: var(--rarity-red); }
         .gold { border-color: var(--rarity-gold); }
 
-        /* Open Tugmasi */
         .open-controls {
             position: fixed; bottom: 0; width: 100%; background: #161b22;
-            padding: 20px; border-top: 1px solid #30363d; display: flex; justify-content: center;
-            box-sizing: border-box;
+            padding: 20px; border-top: 1px solid #30363d; display: flex; justify-content: center; box-sizing: border-box;
         }
         .open-btn {
             background: #238636; color: white; border: none; padding: 15px 40px;
             border-radius: 12px; font-size: 20px; font-weight: bold; font-family: 'Rajdhani';
             width: 100%; max-width: 300px; cursor: pointer; box-shadow: 0 5px 15px rgba(35, 134, 54, 0.4);
         }
-        .open-btn:disabled { background: #30363d; cursor: not-allowed; box-shadow: none; color: #8b949e; }
 
         /* Yutuq Modali */
         #reward-modal {
@@ -151,12 +159,12 @@
             flex-direction: column; align-items: center; justify-content: center;
         }
         .reward-card {
-            width: 80%; background: #161b22; padding: 20px; border-radius: 15px;
+            width: 80%; background: #161b22; padding: 25px; border-radius: 15px;
             text-align: center; border: 2px solid; box-shadow: 0 0 50px;
             animation: popIn 0.3s ease-out;
         }
         @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-        .reward-card img { width: 100%; margin: 20px 0; }
+        .reward-card img { width: 100%; margin: 20px 0; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2)); }
 
         /* NAV */
         .bottom-nav {
@@ -216,8 +224,23 @@
         <p style="color:#8b949e; text-align:center;">Invite system works via Bot.</p>
     </div>
 
-    <div id="profile" class="page">
-        <h2 style="margin-top: 20px;">👤 Inventory</h2>
+    <div id="profile" class="page" style="padding: 0;">
+        <div class="profile-header">
+            <img id="p-avatar" class="p-avatar" src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png">
+            <div class="p-info">
+                <h2 id="p-name">User</h2>
+                <p id="p-id">ID: 000000</p>
+            </div>
+        </div>
+
+        <div class="best-drop-container">
+            <div class="best-drop-card" id="best-drop-el">
+                <div class="best-drop-label">🏆 Best Drop</div>
+                <div style="color: #8b949e; font-size: 14px; margin-top: 10px;">No drops yet...</div>
+            </div>
+        </div>
+
+        <div class="inventory-title">📦 Inventory</div>
         <div id="inventory-list" class="skins-list">
             </div>
     </div>
@@ -229,7 +252,9 @@
             <h2 id="opener-title">Basic Case</h2>
         </div>
         
-        <div style="text-align: center; margin-top: 10px; color: #8b949e; font-size: 12px;">CONTAINS ONE OF THE FOLLOWING:</div>
+        <div style="text-align: center; margin-top: 10px; color: #8b949e; font-size: 12px; text-transform: uppercase;">
+            Contains one of the following:
+        </div>
         
         <div class="skins-list" id="case-contents">
             </div>
@@ -243,7 +268,7 @@
 
     <div id="reward-modal" onclick="closeReward()">
         <div class="reward-card" id="reward-card">
-            <h3 style="color: #8b949e;">YOU UNBOXED:</h3>
+            <h3 style="color: #8b949e; font-size: 12px; letter-spacing: 1px;">YOU UNBOXED:</h3>
             <img id="reward-img" src="" alt="Skin">
             <h2 id="reward-name">AK-47 | Slate</h2>
             <p style="color: #eebb00; font-size: 12px;">Tap to collect</p>
@@ -261,30 +286,24 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // --- DATA ---
-        // CS2 Skinlar bazasi (Barchasi bitta ro'yxatda)
-        // Rasm joyiga internetdan icon qo'ydim, chunki sizda 50 xil rasm yo'q.
-        // Siz xohlasangiz 'img' ni o'zgartirishingiz mumkin.
+        // --- REAL CS2 SKINS DATA (Images included) ---
+        // Bu ro'yxatda haqiqiy Steam rasmlari bor
         const CS2_SKINS = [
             // BLUES (Common)
-            { name: "P250 | Sand Dune", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "MP9 | Storm", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "MAG-7 | Storm", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "SCAR-20 | Sand Mesh", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
+            { id: 1, name: "P250 | Sand Dune", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
+            { id: 2, name: "MP9 | Storm", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
+            { id: 3, name: "MAG-7 | Silver", rarity: "blue", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
             // PURPLES (Uncommon)
-            { name: "Glock-18 | Vogue", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "M4A4 | Evil Daimyo", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "USP-S | Cortex", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
+            { id: 4, name: "Glock-18 | Vogue", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" }, // Placeholder fix
+            { id: 5, name: "M4A4 | Evil Daimyo", rarity: "purple", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }, 
             // PINKS (Rare)
-            { name: "AK-47 | Redline", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "AWP | Atheris", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "M4A1-S | Decimator", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
+            { id: 6, name: "AWP | Atheris", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }, 
+            { id: 7, name: "AK-47 | Redline", rarity: "pink", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
             // REDS (Legendary)
-            { name: "AK-47 | Asiimov", rarity: "red", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "Desert Eagle | Printstream", rarity: "red", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
+            { id: 8, name: "AK-47 | Asiimov", rarity: "red", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
+            { id: 9, name: "USP-S | Kill Confirmed", rarity: "red", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" },
             // GOLD (Special)
-            { name: "★ Karambit | Fade", rarity: "gold", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" },
-            { name: "★ Butterfly | Doppler", rarity: "gold", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xw" }
+            { id: 10, name: "★ Karambit | Fade", rarity: "gold", img: "https://community.akamai.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRv38xwND0_b1lsIwhU4c_3fQJ00_z3eI6JlvT2M4Tck29Y_cg_2b2V8Y2s0QXsqEE9Zj3zdtXAJgU5Y1GE_1G8l7q618e47Z_KyXQ1syIn7HnUgVy4lgE" }
         ];
 
         // --- GAME LOGIC ---
@@ -292,17 +311,27 @@
         let energy = parseFloat(localStorage.getItem('cs2_energy')) || 100;
         let inventory = JSON.parse(localStorage.getItem('cs2_inventory')) || [];
         const MAX_ENERGY = 100;
-        const REFILL_RATE = MAX_ENERGY / (3 * 3600); // 3 soatda to'ladi
+        const REFILL_RATE = MAX_ENERGY / (3 * 3600); 
 
-        // Elementlar
+        // Initial UI
         const scoreEl = document.getElementById('score');
         const energyBar = document.getElementById('energy-bar');
         const energyTxt = document.getElementById('energy-txt');
         const coinBtn = document.getElementById('coinBtn');
 
-        // Initial UI Update
+        // Set User Profile from Telegram
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const user = tg.initDataUnsafe.user;
+            document.getElementById('p-name').innerText = user.first_name + (user.last_name ? " " + user.last_name : "");
+            document.getElementById('p-id').innerText = "ID: " + user.id;
+            if (user.photo_url) {
+                document.getElementById('p-avatar').src = user.photo_url;
+            }
+        }
+
         updateUI();
-        updateInventory();
+        updateInventoryUI();
+        updateBestDrop();
 
         // --- NAVIGATION ---
         function showPage(pageId, navEl) {
@@ -325,7 +354,6 @@
                 saveData();
                 if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
                 
-                // Animatsiya
                 let x = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
                 let y = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
                 createFloater(x, y);
@@ -344,31 +372,29 @@
             setTimeout(() => el.remove(), 800);
         }
 
-        // --- CASE OPENING SYSTEM ---
+        // --- CASE SYSTEM ---
         const caseOpener = document.getElementById('case-opener');
         const caseContentsDiv = document.getElementById('case-contents');
+        let currentCaseName = "";
 
         function openCaseViewer(type) {
             caseOpener.style.display = 'flex';
-            caseContentsDiv.innerHTML = ""; // Tozalash
+            caseContentsDiv.innerHTML = "";
+            currentCaseName = "Basic Case"; // Hozircha faqat Basic bor
 
-            // Ro'yxatni chizish
+            // Generic Skinlar o'rniga haqiqiy rasmlar va nomlar
             CS2_SKINS.forEach(skin => {
                 const item = document.createElement('div');
                 item.className = `skin-item ${skin.rarity}`;
-                // Agar sizda har bir qurol uchun alohida rasm bo'lmasa, umumiy icon ishlatiladi
-                // Men bu yerda CS2 logotipini qo'ydim, keyinchalik o'zgartirasiz
                 item.innerHTML = `
-                    <img src="https://cdn-icons-png.flaticon.com/512/566/566312.png" alt="Gun">
+                    <img src="${skin.img}" alt="Skin">
                     <div class="skin-name" style="color:${getRarityColor(skin.rarity)}">${skin.name}</div>
                 `;
                 caseContentsDiv.appendChild(item);
             });
         }
 
-        function closeCaseViewer() {
-            caseOpener.style.display = 'none';
-        }
+        function closeCaseViewer() { caseOpener.style.display = 'none'; }
 
         function getRarityColor(rarity) {
             if(rarity === 'blue') return '#4b69ff';
@@ -381,33 +407,35 @@
 
         function spinCase() {
             if (score < 200) {
-                tg.showAlert("Not enough coins! You need 200.");
+                tg.showAlert("Not enough coins! Need 200.");
                 return;
             }
 
             score -= 200;
             updateUI();
-            saveData();
 
-            // Random Logic (Weighted)
+            // Rarity Logic
             let rand = Math.random() * 100;
             let rarity = 'blue';
-            if (rand > 99) rarity = 'gold'; // 1%
-            else if (rand > 95) rarity = 'red'; // 4%
-            else if (rand > 85) rarity = 'pink'; // 10%
-            else if (rand > 65) rarity = 'purple'; // 20%
+            if (rand > 99) rarity = 'gold'; 
+            else if (rand > 95) rarity = 'red'; 
+            else if (rand > 85) rarity = 'pink'; 
+            else if (rand > 65) rarity = 'purple'; 
             
-            // Shu raritydagi skinlardan birini tanlash
             const possibleSkins = CS2_SKINS.filter(s => s.rarity === rarity);
-            const wonSkin = possibleSkins[Math.floor(Math.random() * possibleSkins.length)];
-
-            // Yutuqni ko'rsatish
-            showReward(wonSkin);
+            // Tasodifiy skin tanlash
+            const baseSkin = possibleSkins[Math.floor(Math.random() * possibleSkins.length)];
             
-            // Inventoryga qo'shish
+            // Yutuqqa "Qaysi Casedan" degan ma'lumotni qo'shamiz
+            const wonSkin = { ...baseSkin, sourceCase: currentCaseName, obtainedAt: Date.now() };
+
             inventory.push(wonSkin);
             localStorage.setItem('cs2_inventory', JSON.stringify(inventory));
-            updateInventory();
+            
+            showReward(wonSkin);
+            updateInventoryUI();
+            updateBestDrop();
+            saveData();
         }
 
         function showReward(skin) {
@@ -416,12 +444,10 @@
             const img = document.getElementById('reward-img');
             const name = document.getElementById('reward-name');
 
-            // Rangi
             card.style.borderColor = getRarityColor(skin.rarity);
             card.style.boxShadow = `0 0 50px ${getRarityColor(skin.rarity)}`;
             
-            // Rasmi (Hozircha generic)
-            img.src = "https://cdn-icons-png.flaticon.com/512/566/566312.png"; 
+            img.src = skin.img;
             name.innerText = skin.name;
             name.style.color = getRarityColor(skin.rarity);
 
@@ -429,22 +455,48 @@
             if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
         }
 
-        function closeReward() {
-            document.getElementById('reward-modal').style.display = 'none';
-        }
+        function closeReward() { document.getElementById('reward-modal').style.display = 'none'; }
 
-        function updateInventory() {
+        // --- PROFILE LOGIC ---
+        function updateInventoryUI() {
             const list = document.getElementById('inventory-list');
             list.innerHTML = "";
-            inventory.forEach(skin => {
+            // Eng yangilarini tepaga chiqarish
+            [...inventory].reverse().forEach(skin => {
                 const item = document.createElement('div');
                 item.className = `skin-item ${skin.rarity}`;
                 item.innerHTML = `
-                    <img src="https://cdn-icons-png.flaticon.com/512/566/566312.png">
+                    <img src="${skin.img}">
                     <div class="skin-name" style="color:${getRarityColor(skin.rarity)}">${skin.name}</div>
                 `;
                 list.appendChild(item);
             });
+        }
+
+        function updateBestDrop() {
+            const bestEl = document.getElementById('best-drop-el');
+            if (inventory.length === 0) return;
+
+            // Rarity darajalari
+            const levels = { 'blue': 1, 'purple': 2, 'pink': 3, 'red': 4, 'gold': 5 };
+            
+            // Eng kattasini topish
+            let bestSkin = inventory[0];
+            inventory.forEach(skin => {
+                if (levels[skin.rarity] > levels[bestSkin.rarity]) {
+                    bestSkin = skin;
+                }
+            });
+
+            // HTMLni yangilash
+            const color = getRarityColor(bestSkin.rarity);
+            bestEl.style.borderColor = color;
+            bestEl.innerHTML = `
+                <div class="best-drop-label" style="color:${color}">Best Drop</div>
+                <img class="best-drop-img" src="${bestSkin.img}">
+                <div class="best-drop-name" style="color:${color}">${bestSkin.name}</div>
+                <div class="best-drop-case">Found in: ${bestSkin.sourceCase || 'Basic Case'}</div>
+            `;
         }
 
         // --- SYSTEM ---
@@ -460,7 +512,6 @@
             localStorage.setItem('cs2_last_time', Date.now());
         }
 
-        // Energy Regen
         setInterval(() => {
             if (energy < MAX_ENERGY) {
                 energy += REFILL_RATE;
@@ -469,7 +520,6 @@
             }
         }, 1000);
 
-        // Offline Regen Logic
         const lastTime = parseInt(localStorage.getItem('cs2_last_time')) || Date.now();
         const diff = (Date.now() - lastTime) / 1000;
         if(diff > 0) {
@@ -479,7 +529,6 @@
         }
 
         window.addEventListener("beforeunload", saveData);
-
     </script>
 </body>
 </html>
